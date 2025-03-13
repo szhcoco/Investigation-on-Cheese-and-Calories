@@ -12,7 +12,7 @@ Cheese is a pupolar ingredient for food. But it also raise concerns about health
 
 To explore this question, we analyze two datasets from a [recipe recommendation website](https://www.food.com/), containing recipes and their ratings since 2008:
  - Recipe dataset: 83,782 rows and 12 columns, containing information about each recipe
- 
+
  <table border="1">
     <thead>
     <tr style="text-align: right;">
@@ -118,6 +118,7 @@ We change rating of 0.0 in combined dataset to np.nan because valid ratings only
 We calculate the average rating for each recipe as new column 'avg_rating' so it can better demonstrate the overall ratings of the recipe.
 ### Univariate Analysis
 We examine the distribution of calories for calories smaller than 1000 for this analysis in recipes. From the plot we can see that the distribution skew to the right, indicating that most proportion of recipes have a low calories and center around 175. After that there is a decrease of the proportion of recipes and the amount of calories increase.
+
 <iframe
   src="assets/hist_calories_total.html"
   width="800"
