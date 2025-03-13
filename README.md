@@ -12,6 +12,7 @@ Cheese is a pupolar ingredient for food. But it also raise concerns about health
 
 To explore this question, we analyze two datasets from a [recipe recommendation website](https://www.food.com/), containing recipes and their ratings since 2008:
  - Recipe dataset: 83,782 rows and 12 columns, containing information about each recipe
+ 
  <table border="1">
     <thead>
     <tr style="text-align: right;">
@@ -63,6 +64,7 @@ To explore this question, we analyze two datasets from a [recipe recommendation 
   </tbody>
  </table>
  - Ratings dataset: 731,927 rows and 5 columns, recording users' ratings for different recipes.
+
  <table border="1">
     <thead>
     <tr style="text-align: right;">
