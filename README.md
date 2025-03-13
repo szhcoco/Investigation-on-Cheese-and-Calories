@@ -117,10 +117,19 @@ We change rating of 0.0 in combined dataset to np.nan because valid ratings only
 7. Compute average rating\
 We calculate the average rating for each recipe as new column 'avg_rating' so it can better demonstrate the overall ratings of the recipe.
 ### Univariate Analysis
-We examine the distribution of calories for calories smaller than 1000 for this analysis in recipes. From the plot we can see that the distribution skew to the right, indicating that most proportion of recipes have a low calories and center around 175. After that there is a decrease of the proportion of recipes and the amount of calories increase.
+We examine the distribution of all calories at first. But as one can see from the plot the distribution concentrates on the left. The several outliers on the right is hard to see in the plot.
 
 <iframe
   src="assets/hist_calories_total.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+We examine the distribution of calories for calories smaller than 1000 for this analysis in recipes. From the plot we can see that the distribution skew to the right, indicating that most proportion of recipes have a low calories and center around 175. After that there is a decrease of the proportion of recipes and the amount of calories increase.
+
+<iframe
+  src="assets/hist_calories.html"
   width="800"
   height="600"
   frameborder="0"
