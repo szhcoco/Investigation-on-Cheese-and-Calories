@@ -40,6 +40,26 @@ To explore this question, we analyze two datasets from a [recipe recommendation 
       <td>'submitted'</td>
       <td>Date recipe was submitted</td>
     </tr>
+    <tr>
+        <td>'tags'</td>
+        <td>Food.com tags for recipe</td>
+    </tr>
+    <tr>
+      <td>'nutrition'</td>
+      <td>Nutrition information in the form [calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]; PDV stands for “percentage of daily value”</td>
+    </tr>
+    <tr>
+      <td>'n_steps'</td>
+      <td>DNumber of steps in recipe</td>
+    </tr>
+    <tr>
+      <td>'steps'</td>
+      <td>Text for recipe steps, in order</td>
+    </tr>
+    <tr>
+      <td>''description'</td>
+      <td>User-provided description</td>
+    </tr>
   </tbody>
  </table>
  - Ratings dataset: 731,927 rows and 5 columns, recording users' ratings for different recipes.
