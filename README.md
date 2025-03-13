@@ -126,9 +126,7 @@ We examine the distribution of all calories at first. But as one can see from th
   frameborder="0"
 ></iframe>
 
-
 We examine the distribution of calories for calories smaller than 1000 for this analysis in recipes. From the plot we can see that the distribution skew to the right, indicating that most proportion of recipes have a low calories and center around 175. After that there is a decrease of the proportion of recipes and the amount of calories increase.
-
 
 <iframe
   src="assets/hist_calories.html"
