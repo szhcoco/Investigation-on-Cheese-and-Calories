@@ -4,7 +4,7 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/assets/css/style.css?v=ef7ee2dc43af535679b93c7f5853fba22e80cc79" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=9029669519c8318b752839ea565fc10e44f44744" media="screen" type="text/css">
     <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
 
     <!--[if lt IE 9]>
@@ -83,91 +83,91 @@ offers a massive collecion of recipes categorized by popularity, ingredients, cu
   <li><code class="language-plaintext highlighter-rouge">RAW_recipes</code> dataset: 83,782 rows and 12 columns, containing information about each recipe.</li>
 </ul>
 
-<table border="1">
-    <thead>
-    <tr style="text-align: middle;">
-      <th>Column</th>
-      <th>Description</th>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Column</th>
+      <th style="text-align: left">Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>'name'</td>
-      <td>Recipe name</td>
+      <td style="text-align: center">‘name’</td>
+      <td style="text-align: left">Recipe name</td>
     </tr>
     <tr>
-      <td>'id'</td>
-      <td>Recipe ID</td>
+      <td style="text-align: center">‘id’</td>
+      <td style="text-align: left">Recipe ID</td>
     </tr>
     <tr>
-      <td>'minutes'</td>
-      <td>Minutes to prepare recipe</td>
+      <td style="text-align: center">‘minutes’</td>
+      <td style="text-align: left">Minutes to prepare recipe</td>
     </tr>
     <tr>
-      <td>'contributor_id'</td>
-      <td>User ID who submitted this recipe</td>
+      <td style="text-align: center">‘contributor_id’</td>
+      <td style="text-align: left">User ID who submitted this recipe</td>
     </tr>
     <tr>
-      <td>'submitted'</td>
-      <td>Date recipe was submitted</td>
+      <td style="text-align: center">‘submitted’</td>
+      <td style="text-align: left">Date recipe was submitted</td>
     </tr>
     <tr>
-        <td>'tags'</td>
-        <td>Food.com tags for recipe</td>
+      <td style="text-align: center">‘tags’</td>
+      <td style="text-align: left">Food.com tags for recipe</td>
     </tr>
     <tr>
-      <td>'nutrition'</td>
-      <td>Nutrition information in the form [calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]; PDV stands for “percentage of daily value”</td>
+      <td style="text-align: center">‘nutrition’</td>
+      <td style="text-align: left">Nutrition information in the form [calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]; PDV stands for “percentage of daily value”</td>
     </tr>
     <tr>
-      <td>'n_steps'</td>
-      <td>DNumber of steps in recipe</td>
+      <td style="text-align: center">‘n_steps’</td>
+      <td style="text-align: left">Number of steps in recipe</td>
     </tr>
     <tr>
-      <td>'steps'</td>
-      <td>Text for recipe steps, in order</td>
+      <td style="text-align: center">‘steps’</td>
+      <td style="text-align: left">Text for recipe steps, in order</td>
     </tr>
     <tr>
-      <td>''description'</td>
-      <td>User-provided description</td>
+      <td style="text-align: center">‘description’</td>
+      <td style="text-align: left">User-provided description</td>
     </tr>
   </tbody>
- </table>
+</table>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">RAW_interactions</code> dataset: 731,927 rows and 5 columns, recording users’ ratings and comments for different recipes.</li>
 </ul>
 
-<table border="1">
-    <thead>
-    <tr style="text-align: right;">
-      <th>Column</th>
-      <th>Description</th>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Column</th>
+      <th style="text-align: left">Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>'user_id'</td>
-      <td>User ID</td>
+      <td style="text-align: left">‘user_id’</td>
+      <td style="text-align: left">User ID</td>
     </tr>
     <tr>
-      <td>'recipe_id'</td>
-      <td>Recipe ID</td>
+      <td style="text-align: left">‘recipe_id’</td>
+      <td style="text-align: left">Recipe ID</td>
     </tr>
     <tr>
-      <td>'date'</td>
-      <td>Date of interaction</td>
+      <td style="text-align: left">‘date’</td>
+      <td style="text-align: left">Date of interaction</td>
     </tr>
     <tr>
-      <td>'rating'</td>
-      <td>Rating given</td>
+      <td style="text-align: left">‘rating’</td>
+      <td style="text-align: left">Rating given</td>
     </tr>
     <tr>
-      <td>'review'</td>
-      <td>Review text</td>
+      <td style="text-align: left">‘review’</td>
+      <td style="text-align: left">Review text</td>
     </tr>
   </tbody>
- </table>
+</table>
 
 <p>To address our problem, we need to focus on column <code class="language-plaintext highlighter-rouge">nutrition</code> and <code class="language-plaintext highlighter-rouge">ingredient</code>, from which we will extract new values into columns added to the dataframe later in the cleaning process.</p>
 
@@ -180,71 +180,70 @@ offers a massive collecion of recipes categorized by popularity, ingredients, cu
       <li>Removing column <code class="language-plaintext highlighter-rouge">Unnamed: 0</code> since it does not contain any useful information.</li>
     </ul>
   </li>
-  <li>Examine the types of the <code class="language-plaintext highlighter-rouge">RAW_recipes</code> column values</li>
-</ol>
+  <li>
+    <p>Examine the types of the <code class="language-plaintext highlighter-rouge">RAW_recipes</code> column values</p>
 
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: center">column</th>
-      <th style="text-align: center">type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">name</td>
-      <td style="text-align: center">object</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">id</td>
-      <td style="text-align: center">int64</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">minutes</td>
-      <td style="text-align: center">int64</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">contributor_id</td>
-      <td style="text-align: center">int64</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">submitted</td>
-      <td style="text-align: center">object</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">tags</td>
-      <td style="text-align: center">object</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">nutrition</td>
-      <td style="text-align: center">object</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">n_steps</td>
-      <td style="text-align: center">int64</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">steps</td>
-      <td style="text-align: center">object</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">description</td>
-      <td style="text-align: center">object</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">ingredients</td>
-      <td style="text-align: center">object</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">n_ingredients</td>
-      <td style="text-align: center">int64</td>
-    </tr>
-  </tbody>
-</table>
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: center">column</th>
+          <th style="text-align: center">type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: center">name</td>
+          <td style="text-align: center">object</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">id</td>
+          <td style="text-align: center">int64</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">minutes</td>
+          <td style="text-align: center">int64</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">contributor_id</td>
+          <td style="text-align: center">int64</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">submitted</td>
+          <td style="text-align: center">object</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">tags</td>
+          <td style="text-align: center">object</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">nutrition</td>
+          <td style="text-align: center">object</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">n_steps</td>
+          <td style="text-align: center">int64</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">steps</td>
+          <td style="text-align: center">object</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">description</td>
+          <td style="text-align: center">object</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">ingredients</td>
+          <td style="text-align: center">object</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">n_ingredients</td>
+          <td style="text-align: center">int64</td>
+        </tr>
+      </tbody>
+    </table>
 
-<p>We notice that the <code class="language-plaintext highlighter-rouge">nutrition</code> and <code class="language-plaintext highlighter-rouge">ingredients</code> are <code class="language-plaintext highlighter-rouge">object</code>, so we want to do transforming of these columns.</p>
-
-<ol>
+    <p>We notice that the <code class="language-plaintext highlighter-rouge">nutrition</code> and <code class="language-plaintext highlighter-rouge">ingredients</code> are <code class="language-plaintext highlighter-rouge">object</code>, so we want to do transforming of these columns.</p>
+  </li>
   <li>Convert each nutrition into single column
     <ul>
       <li>For <code class="language-plaintext highlighter-rouge">nutrition</code>, each row is a lise-list srings storing values in the form <code class="language-plaintext highlighter-rouge">[calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]</code>. Since all values are important for later investigation, we want to get access to them easier, so we:
@@ -368,20 +367,20 @@ offers a massive collecion of recipes categorized by popularity, ingredients, cu
 <h3 id="univariate-analysis">Univariate Analysis</h3>
 <p>First, we will examine the distribution of  calories from the <code class="language-plaintext highlighter-rouge">recipes</code> dataframe.</p>
 
-<iframe src="assets/hist_calories_total.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="assets/hist_calories_total.html" width="800" height="450" frameborder="0"></iframe>
 
 <p>But as one can see from the plot, the distribution mostly concentrates on the very left. The outliers at the right tail makes the distribution hard to be examined.</p>
 
 <p>Then we remove the outliers to focus on values less and equal to 990.</p>
 
-<iframe src="assets/hist_calories.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="assets/hist_calories.html" width="800" height="450" frameborder="0"></iframe>
 
 <p>By removing the outliers in the histogram, we can more clearly observe that the distribution is skewed to the left, with the majority of data concentrated between 50 and 400 calories, and a peak at around 180. This is quite surprising, as the distribution suggests that more recipes promoting a healthy diet have been published. After the peak there is a decrease of the count of recipes, corresponding with higher calories.</p>
 
 <h3 id="bivariate-analysis">Bivariate Analysis</h3>
 <p>For bivariate analysis, we will examine the distribution of calories with and without cheese, also with outliers removed to better visualization.</p>
 
-<iframe src="assets/fig_with_without_cheese.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="assets/fig_with_without_cheese.html" width="900" height="500" frameborder="0"></iframe>
 
 <p>We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories.</p>
 
@@ -393,119 +392,234 @@ offers a massive collecion of recipes categorized by popularity, ingredients, cu
 <table>
   <thead>
     <tr>
-      <th style="text-align: right">Year</th>
-      <th style="text-align: right">(‘diff_prop’, 0.0)</th>
-      <th style="text-align: right">(‘diff_prop’, 1.0)</th>
-      <th style="text-align: right">(‘diff_prop’, 2.0)</th>
-      <th style="text-align: right">(‘diff_prop’, 3.0)</th>
-      <th style="text-align: right">(‘diff_prop’, 4.0)</th>
-      <th style="text-align: right">(‘diff_prop’, 5.0)</th>
+      <th style="text-align: center">Year</th>
+      <th style="text-align: center">(‘diff_prop’, 1.0)</th>
+      <th style="text-align: center">(‘diff_prop’, 2.0)</th>
+      <th style="text-align: center">(‘diff_prop’, 3.0)</th>
+      <th style="text-align: center">(‘diff_prop’, 4.0)</th>
+      <th style="text-align: center">(‘diff_prop’, 5.0)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: right">2008</td>
-      <td style="text-align: right">-0.00417087</td>
-      <td style="text-align: right">0.0373018</td>
-      <td style="text-align: right">0.0314886</td>
-      <td style="text-align: right">0.0339742</td>
-      <td style="text-align: right">0.0296494</td>
-      <td style="text-align: right">0.00595056</td>
+      <td style="text-align: center">2008</td>
+      <td style="text-align: center">0.04</td>
+      <td style="text-align: center">0.03</td>
+      <td style="text-align: center">0.03</td>
+      <td style="text-align: center">0.03</td>
+      <td style="text-align: center">0.01</td>
     </tr>
     <tr>
-      <td style="text-align: right">2009</td>
-      <td style="text-align: right">-0.00117979</td>
-      <td style="text-align: right">0.0121839</td>
-      <td style="text-align: right">-0.00573415</td>
-      <td style="text-align: right">0.0251196</td>
-      <td style="text-align: right">0.00886583</td>
-      <td style="text-align: right">0.0102082</td>
+      <td style="text-align: center">2009</td>
+      <td style="text-align: center">0.01</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">0.03</td>
+      <td style="text-align: center">0.01</td>
+      <td style="text-align: center">0.01</td>
     </tr>
     <tr>
-      <td style="text-align: right">2010</td>
-      <td style="text-align: right">-0.00931341</td>
-      <td style="text-align: right">0.00106069</td>
-      <td style="text-align: right">0.0427559</td>
-      <td style="text-align: right">-0.00798016</td>
-      <td style="text-align: right">-0.00647318</td>
-      <td style="text-align: right">-0.00948729</td>
+      <td style="text-align: center">2010</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0.04</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">-0.01</td>
     </tr>
     <tr>
-      <td style="text-align: right">2011</td>
-      <td style="text-align: right">0.00977973</td>
-      <td style="text-align: right">-0.00940128</td>
-      <td style="text-align: right">0.00721202</td>
-      <td style="text-align: right">0.0137947</td>
-      <td style="text-align: right">-0.00071431</td>
-      <td style="text-align: right">-0.00714992</td>
+      <td style="text-align: center">2011</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">0.01</td>
+      <td style="text-align: center">0.01</td>
+      <td style="text-align: center">-0</td>
+      <td style="text-align: center">-0.01</td>
     </tr>
     <tr>
-      <td style="text-align: right">2012</td>
-      <td style="text-align: right">0.023112</td>
-      <td style="text-align: right">-0.00471617</td>
-      <td style="text-align: right">0.016432</td>
-      <td style="text-align: right">-0.00377306</td>
-      <td style="text-align: right">-0.00190885</td>
-      <td style="text-align: right">0.0127113</td>
+      <td style="text-align: center">2012</td>
+      <td style="text-align: center">-0</td>
+      <td style="text-align: center">0.02</td>
+      <td style="text-align: center">-0</td>
+      <td style="text-align: center">-0</td>
+      <td style="text-align: center">0.01</td>
     </tr>
     <tr>
-      <td style="text-align: right">2013</td>
-      <td style="text-align: right">0.022195</td>
-      <td style="text-align: right">0.00508453</td>
-      <td style="text-align: right">0.000573415</td>
-      <td style="text-align: right">-0.014781</td>
-      <td style="text-align: right">-0.00979702</td>
-      <td style="text-align: right">0.00557635</td>
+      <td style="text-align: center">2013</td>
+      <td style="text-align: center">0.01</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">0.01</td>
     </tr>
     <tr>
-      <td style="text-align: right">2014</td>
-      <td style="text-align: right">0.00269153</td>
-      <td style="text-align: right">0.0326774</td>
-      <td style="text-align: right">0.00872339</td>
-      <td style="text-align: right">-0.0103835</td>
-      <td style="text-align: right">-0.00499667</td>
-      <td style="text-align: right">0.00335626</td>
+      <td style="text-align: center">2014</td>
+      <td style="text-align: center">0.03</td>
+      <td style="text-align: center">0.01</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">-0</td>
+      <td style="text-align: center">0</td>
     </tr>
     <tr>
-      <td style="text-align: right">2015</td>
-      <td style="text-align: right">-0.0104338</td>
-      <td style="text-align: right">-0.0132254</td>
-      <td style="text-align: right">-0.0242568</td>
-      <td style="text-align: right">-0.0121251</td>
-      <td style="text-align: right">-0.00482612</td>
-      <td style="text-align: right">-0.00185076</td>
+      <td style="text-align: center">2015</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">-0.02</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">-0</td>
+      <td style="text-align: center">-0</td>
     </tr>
     <tr>
-      <td style="text-align: right">2016</td>
-      <td style="text-align: right">-0.0105039</td>
-      <td style="text-align: right">-0.0162877</td>
-      <td style="text-align: right">-0.0174133</td>
-      <td style="text-align: right">-0.00873181</td>
-      <td style="text-align: right">-0.00184123</td>
-      <td style="text-align: right">-0.00384644</td>
+      <td style="text-align: center">2016</td>
+      <td style="text-align: center">-0.02</td>
+      <td style="text-align: center">-0.02</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">-0</td>
+      <td style="text-align: center">-0</td>
     </tr>
     <tr>
-      <td style="text-align: right">2017</td>
-      <td style="text-align: right">-0.0131052</td>
-      <td style="text-align: right">-0.0247924</td>
-      <td style="text-align: right">-0.0407065</td>
-      <td style="text-align: right">-0.00617981</td>
-      <td style="text-align: right">-0.00443334</td>
-      <td style="text-align: right">-0.00802292</td>
+      <td style="text-align: center">2017</td>
+      <td style="text-align: center">-0.02</td>
+      <td style="text-align: center">-0.04</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">-0</td>
+      <td style="text-align: center">-0.01</td>
     </tr>
     <tr>
-      <td style="text-align: right">2018</td>
-      <td style="text-align: right">-0.00907127</td>
-      <td style="text-align: right">-0.0198854</td>
-      <td style="text-align: right">-0.0190744</td>
-      <td style="text-align: right">-0.00893407</td>
-      <td style="text-align: right">-0.00352448</td>
-      <td style="text-align: right">-0.0074453</td>
+      <td style="text-align: center">2018</td>
+      <td style="text-align: center">-0.02</td>
+      <td style="text-align: center">-0.02</td>
+      <td style="text-align: center">-0.01</td>
+      <td style="text-align: center">-0</td>
+      <td style="text-align: center">-0.01</td>
     </tr>
   </tbody>
 </table>
 
-<p>The pivot table is aimed to examine the <code class="language-plaintext highlighter-rouge">diff_prop</code> which is calculated by <code class="language-plaintext highlighter-rouge">prop_cheese_recipes - prop_nocheese_recipes</code> across years from 2008 to 2018, given the level of rating. Positive values indicate there are more recipes with cheese, and on the other hand negative values indicate more recipes without cheese.</p>
+<p><br />
+The pivot table is aimed to examine the <code class="language-plaintext highlighter-rouge">diff_prop</code> which is calculated by <code class="language-plaintext highlighter-rouge">prop_cheese_recipes - prop_nocheese_recipes</code> across years from 2008 to 2018, given the level of rating. Positive values indicate there are more recipes with cheese, and on the other hand negative values indicate more recipes without cheese.</p>
+
+<h2 id="assessment-of-missingness">Assessment of Missingness</h2>
+
+<h3 id="nmar-analysis">NMAR Analysis</h3>
+<p>We believe the missingness in the <code class="language-plaintext highlighter-rouge">review column</code> is NMAR. There are a few possible reasons for people not to fill in the review section. For example, people tend not to post reviews if they feel neutural or nothing special about the recipes, and thus choose not to take extra steps wrting the reviews and publish on the site. Also, it is less likely for people to write reviews if they have negative experience with the recipes, either because they want to avoid conflicts against those who like the food, or it is worth wasting their time doing so. On the other hand, people who like the recipes or have anything interesting to share tend to leave comments. Thus the missingess depends on the values of the <code class="language-plaintext highlighter-rouge">review</code> column, making it NMAR.</p>
+
+<p>We could obtain additional data to to make the missingness MAR. One possible approach is to send out polls through personal emails provided during registration process, or communicate through messages on the Food website, to ask if they could share their experience with the recipes and reason why they don’t want to write reviews.</p>
+
+<h3 id="missingness-dependency">Missingness Dependency</h3>
+
+<p>In this part, we will examine the missingness dependency between columns, using permutation tests.</p>
+
+<h4 id="mar">MAR</h4>
+<p>The first two columns that we want to focus on are <code class="language-plaintext highlighter-rouge">calories</code> and <code class="language-plaintext highlighter-rouge">rating</code>, and we want to determine whether the missingness in <code class="language-plaintext highlighter-rouge">rating</code> is dependent on distribution of <code class="language-plaintext highlighter-rouge">calories</code>.</p>
+
+<p><strong>Null Hypothesis</strong>: the distribution of  <code class="language-plaintext highlighter-rouge">calories</code> is the same when <code class="language-plaintext highlighter-rouge">rating</code> is missing and not missing.
+<strong>Alternative Hypothesis</strong>: the distribution of <code class="language-plaintext highlighter-rouge">calories</code> is not the same when <code class="language-plaintext highlighter-rouge">rating</code> is missing and not missing.</p>
+
+<p>Before performing the permutation test, we want to visualize the distribution of calories for recipes missing and not missing.</p>
+
+<iframe src="assets/rating_calories_total.html" width="900" height="500" frameborder="0"></iframe>
+
+<p>But because there are a lot of outliers in <code class="language-plaintext highlighter-rouge">calories</code>, the values are compressed to the left and make the distributions hard to see. So we remove the outliers and generate another plot as shown below.</p>
+
+<iframe src="assets/rating_calories_no_outleirs.html" width="900" height="500" frameborder="0"></iframe>
+
+<p>The shape of two distributions look similar, so we will use <strong>permutation test</strong> with <strong>absolute value of difference in means</strong> as our test statistics, and the rejection threshold is <strong>0.05</strong>.</p>
+
+<p>In the permutation test, we shuffle the <code class="language-plaintext highlighter-rouge">calories</code> column and calculate the test statstics for 1000 times. Then we plot the distribution of the calculated statistics and the observed one.</p>
+
+<iframe src="assets/permu_test_1.html" width="900" height="500" frameborder="0"></iframe>
+
+<p>Since the p value is less than 0.05 and as small as 0, we have strong evidence to reject the null hypothesis and say that the distribution for <code class="language-plaintext highlighter-rouge">calories</code> is different for missing and not missing <code class="language-plaintext highlighter-rouge">rating</code>. Thus missingness in <code class="language-plaintext highlighter-rouge">rating</code> is MAR, dependent on <code class="language-plaintext highlighter-rouge">calories</code>.</p>
+
+<h4 id="mcar">MCAR</h4>
+<p>Then we want to see if the missingness in description is dependent on number of steps to cook, or <code class="language-plaintext highlighter-rouge">n_steps</code> in the <code class="language-plaintext highlighter-rouge">recipes</code> dataframe.</p>
+<ul>
+  <li><strong>Null hypothesis</strong>: the distribution of <code class="language-plaintext highlighter-rouge">n_steps</code> is the same when <code class="language-plaintext highlighter-rouge">description</code> is missing and not missing.</li>
+  <li><strong>Alternative hypothesis</strong>: the distribution of <code class="language-plaintext highlighter-rouge">n_steps </code>is not the same when <code class="language-plaintext highlighter-rouge">description</code> is missing and not missing.</li>
+</ul>
+
+<p>We visualize the distribution of two distributions to determine type of test to perform.</p>
+
+<iframe src="assets/steps_descrip.html" width="900" height="500" frameborder="0"></iframe>
+
+<p>From the histogram we notice that two distributions have similar shape. Thus we would use <strong>permutation test</strong> with <strong>absolute values in means</strong> as test statistics. The significance level is <strong>0.05</strong>.</p>
+
+<iframe src="assets/perm_2.html" width="900" height="450" frameborder="0"></iframe>
+
+<p>The p_value from the permutation test is 0.216, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of n_steps are different when description is missing and not missing. Thus the missingness dependency between description and n_steps are MCAR.</p>
+
+<h2 id="hypothesis-test">Hypothesis Test</h2>
+
+<p>We are interested in whether the amount of calories in a recipe is higher when cheese is included as an ingredient. To test this hypothesis, we use a permutation test.</p>
+
+<p><strong>Null Hypothesis</strong>: the amount of calories in a recipe is not higher when it contains cheese.
+<strong>Alternative Hypothesis</strong>: the amount of calories in a recipe is higher when it contains cheese.
+<strong>Test Statistic</strong>: mean calories with cheese - mean calories without cheese
+<strong>Significance Level</strong>: 0.05</p>
+
+<p>The alternative hypothesis represents our assumption that recipes with cheese have higher calorie content. The null hypothesis is the reverse, stating there is no such relationship between the presence of cheese and the calorie content of a recipe. We use the difference in mean calories (mean calories with cheese - mean calories without cheese) as the test statistic because the mean effectively summarizes the central tendency of the data for each group. A large positive value of this statistic would indicate that recipes with cheese tend to have higher calorie content. We choose a significance level of 0.05 because it is a standard threshold for statistical significance.</p>
+
+<p>In the permutation test, we randomly shuffle the calorie values and assign them to recipes (with or without cheese) for 1,000 iterations. The p-value obtained from this test is 0.0, meaning that none of the randomly generated differences in means is large or equal to the observed difference. This provides strong evidence against the null hypothesis. Therefore, we reject the null hypothesis and conclude that the amount of calories in a recipe is significantly higher when it contains cheese.</p>
+
+<h2 id="framing-a-prediction">Framing a Prediction</h2>
+
+<p>We plan to predict the amount of calories for each recipe using a linear regression model. Since the amount of calories can be any positive value, linear regression is a suitable choice for this continuous target variable.</p>
+
+<p>The target variable for our model is the amount of calories in each recipe. We chose this as our prediction target because calories are an important factor when deciding whether to use a recipe for a meal. Recipes with too many calories may raise health concerns, while recipes with too few calories may not suffice as a complete meal. Additionally, calories are intuitively related to other nutritional components, such as fats, proteins, and carbohydrates. From our preliminary investigation, we also found that the presence of cheese in a recipe is correlated with calorie content. This suggests that we can predict calorie amounts based on the presence of cheese and other nutritional features.</p>
+
+<p>We evaluated our model using Root Mean Squared Error (RMSE). RMSE measures the average magnitude of the prediction errors in the same units as the target variable (calories), making it easy to interpret. We chose RMSE over $R^2$ because RMSE provides a direct measure of prediction error, while $R^2$ only explains the proportion of variance in the target variable. Additionally, we chose RMSE over Mean Absolute Error (MAE) because RMSE penalizes large errors more heavily, which aligns with our goal of avoiding significant inaccuracies in calorie predictions.</p>
+
+<p>Since the nutritions are calculated separately, it is reasonable to use other nutrition and ingredients to predict the amount of calories.</p>
+
+<h2 id="baseline-model">Baseline Model</h2>
+
+<p>In our baseline model, we use linear regression to predict the amount of calories, a quantitative value, in recipes. We chose linear regression because it is simple, interpretable, and suitable for predicting continuous target variables like calories. The data is split into training and testing sets with an 80/20 ratio.</p>
+
+<p>The model uses two quantitative features to predict:</p>
+<ol>
+  <li>total_fat</li>
+  <li>sugar</li>
+</ol>
+
+<p>There are no ordinal or nominal features in this model, so no encoding or transformation is required. The features are used directly in the LinearRegression() function.</p>
+
+<p>The RMSE of train set is 203.8 and RMSE of test set is 196.2. The similar performance on the training and testing sets indicates that there is no significant overfitting. However, the RMSE of approximately 200 calories is relatively high, meaning the model’s predictions may not be precise enough for practical use. This is likely because the model uses only two features (total_fat and sugar) without further transformation and does not account for other factors that may influence calorie content. We should be able to improve the model performance by carefully choosing features and try some transformation.</p>
+
+<h2 id="final-model">Final Model</h2>
+
+<p>We consider columns ‘total_fat’, ‘sugar’, ‘sodium’, ‘protein’, ‘saturated_fat’, ‘carbohydrates’ as features that may contribute to predicting because calories are derived from macronutrients (fats, proteins, and carbohydrates) and other nutritional components. By including these features, we capture the primary sources of calories in recipes, making them highly relevant for the prediction task. Besides them, we also include ‘cheese’ because it is a calorie-dense ingredient, and its presence in a recipe is likely to significantly impact the total calorie count. Including this feature allows the model to account for the additional calories contributed by cheese.</p>
+
+<p>We use Linear regression to make the prediction. To optimize the model, we performed hyperparameter tuning using GridSearchCV and find that the best hyperparameter is True for fit_intercept and False for positive.</p>
+
+<p>To improve the model’s performance, we experimented with different combinations of features and transformations:<br />
+We tried combinations of degree one and found ‘total_fat’, ‘protein’, ‘carbohydrates’ and ‘cheese’ performed best.<br />
+We tried applying QuantileTransform to different combination of features, and not surprisingly it doesn’t produce a better result.<br />
+We wondered would larger degree give better result and tried adding different combinations of features of degree 2 to ‘total_fat’, ‘protein’, ‘carbohydrates’ and ‘cheese’. [carbohydrates with degree 2, carbohydrates, total_fat, protein, cheese] achieved smallest RMSE.<br />
+We further tried different combinations of features of degree 2 and 3 and add them to ‘total_fat’, ‘protein’, ‘carbohydrates’ and ‘cheese’ of degree 1. We didn’t achieve better result than [‘total_fat’, ‘protein’, ‘carbohydrates’, ‘cheese’].<br />
+We didn’t try degree 4 because as none in degree 3 outperforming orginal combination, it is unlikely we will find a better combination in degree 4. We can also see that when we try different d for PolynomialFeatures(d), 1 achieves smallest RMSE for test set.</p>
+
+<p>So our final model is a linear regression using [carbohydrates with degree 2, carbohydrates, total_fat, protein, cheese], in which [carbohydrates, total_fat, protein] are quantitative values that don’t need further transformation. cheese is booleans but since the program takes True as 1 and False as 0, it also don’t need further transformation. carbohydrates with degree 2 is got by apply make_column_transformer to carbohydrates.</p>
+
+<p>The final model performs better than baseline model. It achieves RMSE of 48.40 for train set and of 43.58 for test set.</p>
+
+<h2 id="fairness-analysis">Fairness Analysis</h2>
+
+<p>For fairness analysis, we split the data into two groups: recipes with low sugar (less or equal to 23) and recipes with high sugar (more than 23). We pick 23 as the split point because it is the median of sugar in dataset. Since we uses linear regression model, we decide to rate our test using rooted mean squared error.<br />
+To check the p value, we use permutation testing here. We shuffle whether each recipe has high or low sugar and calculate simulated result based on shuffled category.</p>
+
+<p><strong>Null hypothesis</strong>: Our model is fair. It predicts calories for recipes with low sugar and high sugar with similar RMSE.<br />
+<strong>Alternative hypothesis</strong>: our model is biased. It predicts calories for recipes with high sugar with higher RMSE than recipes with low sugar.<br />
+<strong>Test statistic</strong>: RMSE of recipes with high sugar-RMSE of recipes with low sugar<br />
+<strong>Significance level</strong>: 0.05</p>
+
+<iframe src="assets/sugar_fair.html" width="800" height="600" frameborder="0"></iframe>
+
+<p>We also want to see if our prediction is fair for cheese. More precisely, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use RMSE as evaluation metric and permutation test to simulate the difference in random state.</p>
+
+<p><strong>Null hypothesis</strong>: Our model is fair. It predicts calories for recipes with and without cheese with similar RMSE.<br />
+<strong>Alternative hypothesis</strong>: our model is biased. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.<br />
+<strong>Test statistic</strong>: RMSE of recipes with cheese - RMSE of recipes without cheese<br />
+<strong>Significance level</strong>: 0.05</p>
+
+<iframe src="assets/cheese_fair.html" width="800" height="600" frameborder="0"></iframe>
+<p>Since we get a p value of 0.0, we reject null hypothesis. Our model is biased because it predicts calories for recipes with cheese better comparing to recipes without cheese.</p>
 
         </section>
 

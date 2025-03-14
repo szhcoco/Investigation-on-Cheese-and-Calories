@@ -24,89 +24,29 @@ Our goal in this project is to answer the question of **whether food with cheese
 #### Introduction to the Columns
  - `RAW_recipes` dataset: 83,782 rows and 12 columns, containing information about each recipe. 
 
- <table border="1">
-    <thead>
-    <tr style="text-align: middle;">
-      <th>Column</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>'name'</td>
-      <td>Recipe name</td>
-    </tr>
-    <tr>
-      <td>'id'</td>
-      <td>Recipe ID</td>
-    </tr>
-    <tr>
-      <td>'minutes'</td>
-      <td>Minutes to prepare recipe</td>
-    </tr>
-    <tr>
-      <td>'contributor_id'</td>
-      <td>User ID who submitted this recipe</td>
-    </tr>
-    <tr>
-      <td>'submitted'</td>
-      <td>Date recipe was submitted</td>
-    </tr>
-    <tr>
-        <td>'tags'</td>
-        <td>Food.com tags for recipe</td>
-    </tr>
-    <tr>
-      <td>'nutrition'</td>
-      <td>Nutrition information in the form [calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]; PDV stands for “percentage of daily value”</td>
-    </tr>
-    <tr>
-      <td>'n_steps'</td>
-      <td>DNumber of steps in recipe</td>
-    </tr>
-    <tr>
-      <td>'steps'</td>
-      <td>Text for recipe steps, in order</td>
-    </tr>
-    <tr>
-      <td>''description'</td>
-      <td>User-provided description</td>
-    </tr>
-  </tbody>
- </table>
+ | Column           | Description                                                                                                                                                                                       |
+|:----------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 'name'           | Recipe name                                                                                                                                                                                       |
+| 'id'             | Recipe ID                                                                                                                                                                                         |
+| 'minutes'        | Minutes to prepare recipe                                                                                                                                                                         |
+| 'contributor_id' | User ID who submitted this recipe                                                                                                                                                                 |
+| 'submitted'      | Date recipe was submitted                                                                                                                                                                         |
+| 'tags'           | Food.com tags for recipe                                                                                                                                                                          |
+| 'nutrition'      | Nutrition information in the form [calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]; PDV stands for “percentage of daily value” |
+| 'n_steps'        | Number of steps in recipe                                                                                                                                                                         |
+| 'steps'          | Text for recipe steps, in order                                                                                                                                                                   |
+| 'description'    | User-provided description                                                                                                                                                                         |
 
  - `RAW_interactions` dataset: 731,927 rows and 5 columns, recording users' ratings and comments for different recipes.
 
- <table border="1">
-    <thead>
-    <tr style="text-align: right;">
-      <th>Column</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>'user_id'</td>
-      <td>User ID</td>
-    </tr>
-    <tr>
-      <td>'recipe_id'</td>
-      <td>Recipe ID</td>
-    </tr>
-    <tr>
-      <td>'date'</td>
-      <td>Date of interaction</td>
-    </tr>
-    <tr>
-      <td>'rating'</td>
-      <td>Rating given</td>
-    </tr>
-    <tr>
-      <td>'review'</td>
-      <td>Review text</td>
-    </tr>
-  </tbody>
- </table>
+| Column      | Description         |
+|:------------|:--------------------|
+| 'user_id'   | User ID             |
+| 'recipe_id' | Recipe ID           |
+| 'date'      | Date of interaction |
+| 'rating'    | Rating given        |
+| 'review'    | Review text         |
+
 
 To address our problem, we need to focus on column `nutrition` and `ingredient`, from which we will extract new values into columns added to the dataframe later in the cleaning process. 
 
@@ -117,22 +57,22 @@ To address our problem, we need to focus on column `nutrition` and `ingredient`,
 - Removing column `Unnamed: 0` since it does not contain any useful information.
 2. Examine the types of the `RAW_recipes` column values  
 
-  | column         | type   |
-  |:--------------:|:------:|
-  | name           | object |
-  | id             | int64  |
-  | minutes        | int64  |
-  | contributor_id | int64  |
-  | submitted      | object |
-  | tags           | object |
-  | nutrition      | object |
-  | n_steps        | int64  |
-  | steps          | object |
-  | description    | object |
-  | ingredients    | object |
-  | n_ingredients  | int64  |
+    | column         | type   |
+    |:--------------:|:------:|
+    | name           | object |
+    | id             | int64  |
+    | minutes        | int64  |
+    | contributor_id | int64  |
+    | submitted      | object |
+    | tags           | object |
+    | nutrition      | object |
+    | n_steps        | int64  |
+    | steps          | object |
+    | description    | object |
+    | ingredients    | object |
+    | n_ingredients  | int64  |
 
-We notice that the `nutrition` and `ingredients` are `object`, so we want to do transforming of these columns.
+    We notice that the `nutrition` and `ingredients` are `object`, so we want to do transforming of these columns.
 
 3. Convert each nutrition into single column
 - For `nutrition`, each row is a lise-list srings storing values in the form `[calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]`. Since all values are important for later investigation, we want to get access to them easier, so we: 
@@ -172,7 +112,7 @@ First, we will examine the distribution of  calories from the `recipes` datafram
 <iframe
   src="assets/hist_calories_total.html"
   width="800"
-  height="600"
+  height="450"
   frameborder="0"
 ></iframe>
 
@@ -183,7 +123,7 @@ Then we remove the outliers to focus on values less and equal to 990.
 <iframe
   src="assets/hist_calories.html"
   width="800"
-  height="600"
+  height="450"
   frameborder="0"
 ></iframe>
 
@@ -195,8 +135,8 @@ For bivariate analysis, we will examine the distribution of calories with and wi
 
 <iframe
   src="assets/fig_with_without_cheese.html"
-  width="800"
-  height="600"
+  width="900"
+  height="500"
   frameborder="0"
 ></iframe>
 
@@ -207,18 +147,185 @@ For bivariate analysis, we will examine the distribution of calories with and wi
 ### Grouping and Aggregates
 An interesting aggregate that we find is shown in the pivot table below. 
 
-|   Year |   ('diff_prop', 0.0) |   ('diff_prop', 1.0) |   ('diff_prop', 2.0) |   ('diff_prop', 3.0) |   ('diff_prop', 4.0) |   ('diff_prop', 5.0) |
-|-------:|---------------------:|---------------------:|---------------------:|---------------------:|---------------------:|---------------------:|
-|   2008 |          -0.00417087 |           0.0373018  |          0.0314886   |           0.0339742  |           0.0296494  |           0.00595056 |
-|   2009 |          -0.00117979 |           0.0121839  |         -0.00573415  |           0.0251196  |           0.00886583 |           0.0102082  |
-|   2010 |          -0.00931341 |           0.00106069 |          0.0427559   |          -0.00798016 |          -0.00647318 |          -0.00948729 |
-|   2011 |           0.00977973 |          -0.00940128 |          0.00721202  |           0.0137947  |          -0.00071431 |          -0.00714992 |
-|   2012 |           0.023112   |          -0.00471617 |          0.016432    |          -0.00377306 |          -0.00190885 |           0.0127113  |
-|   2013 |           0.022195   |           0.00508453 |          0.000573415 |          -0.014781   |          -0.00979702 |           0.00557635 |
-|   2014 |           0.00269153 |           0.0326774  |          0.00872339  |          -0.0103835  |          -0.00499667 |           0.00335626 |
-|   2015 |          -0.0104338  |          -0.0132254  |         -0.0242568   |          -0.0121251  |          -0.00482612 |          -0.00185076 |
-|   2016 |          -0.0105039  |          -0.0162877  |         -0.0174133   |          -0.00873181 |          -0.00184123 |          -0.00384644 |
-|   2017 |          -0.0131052  |          -0.0247924  |         -0.0407065   |          -0.00617981 |          -0.00443334 |          -0.00802292 |
-|   2018 |          -0.00907127 |          -0.0198854  |         -0.0190744   |          -0.00893407 |          -0.00352448 |          -0.0074453  |
+|   Year |   ('diff_prop', 1.0) |   ('diff_prop', 2.0) |   ('diff_prop', 3.0) |   ('diff_prop', 4.0) |   ('diff_prop', 5.0) |
+|:------:|:--------------------:|:--------------------:|:--------------------:|:--------------------:|:--------------------:|
+|   2008 |                 0.04 |                 0.03 |                 0.03 |                 0.03 |                 0.01 |
+|   2009 |                 0.01 |                -0.01 |                 0.03 |                 0.01 |                 0.01 |
+|   2010 |                 0    |                 0.04 |                -0.01 |                -0.01 |                -0.01 |
+|   2011 |                -0.01 |                 0.01 |                 0.01 |                -0    |                -0.01 |
+|   2012 |                -0    |                 0.02 |                -0    |                -0    |                 0.01 |
+|   2013 |                 0.01 |                 0    |                -0.01 |                -0.01 |                 0.01 |
+|   2014 |                 0.03 |                 0.01 |                -0.01 |                -0    |                 0    |
+|   2015 |                -0.01 |                -0.02 |                -0.01 |                -0    |                -0    |
+|   2016 |                -0.02 |                -0.02 |                -0.01 |                -0    |                -0    |
+|   2017 |                -0.02 |                -0.04 |                -0.01 |                -0    |                -0.01 |
+|   2018 |                -0.02 |                -0.02 |                -0.01 |                -0    |                -0.01 |
 
+<br>
 The pivot table is aimed to examine the `diff_prop` which is calculated by `prop_cheese_recipes - prop_nocheese_recipes` across years from 2008 to 2018, given the level of rating. Positive values indicate there are more recipes with cheese, and on the other hand negative values indicate more recipes without cheese. 
+
+
+## Assessment of Missingness
+
+### NMAR Analysis
+We believe the missingness in the `review column` is NMAR. There are a few possible reasons for people not to fill in the review section. For example, people tend not to post reviews if they feel neutural or nothing special about the recipes, and thus choose not to take extra steps wrting the reviews and publish on the site. Also, it is less likely for people to write reviews if they have negative experience with the recipes, either because they want to avoid conflicts against those who like the food, or it is worth wasting their time doing so. On the other hand, people who like the recipes or have anything interesting to share tend to leave comments. Thus the missingess depends on the values of the `review` column, making it NMAR. 
+
+We could obtain additional data to to make the missingness MAR. One possible approach is to send out polls through personal emails provided during registration process, or communicate through messages on the Food website, to ask if they could share their experience with the recipes and reason why they don't want to write reviews. 
+
+
+### Missingness Dependency
+
+In this part, we will examine the missingness dependency between columns, using permutation tests. 
+
+#### MAR
+The first two columns that we want to focus on are `calories` and `rating`, and we want to determine whether the missingness in `rating` is dependent on distribution of `calories`. 
+
+**Null Hypothesis**: the distribution of  `calories` is the same when `rating` is missing and not missing.
+**Alternative Hypothesis**: the distribution of `calories` is not the same when `rating` is missing and not missing.
+
+Before performing the permutation test, we want to visualize the distribution of calories for recipes missing and not missing.
+
+
+<iframe
+  src="assets/rating_calories_total.html"
+  width="900"
+  height="500"
+  frameborder="0"
+></iframe>
+
+But because there are a lot of outliers in `calories`, the values are compressed to the left and make the distributions hard to see. So we remove the outliers and generate another plot as shown below. 
+
+
+<iframe
+  src="assets/rating_calories_no_outleirs.html"
+  width="900"
+  height="500"
+  frameborder="0"
+></iframe>
+
+The shape of two distributions look similar, so we will use **permutation test** with **absolute value of difference in means** as our test statistics, and the rejection threshold is **0.05**.
+
+In the permutation test, we shuffle the `calories` column and calculate the test statstics for 1000 times. Then we plot the distribution of the calculated statistics and the observed one. 
+
+<iframe
+  src="assets/permu_test_1.html"
+  width="900"
+  height="500"
+  frameborder="0"
+></iframe>
+
+Since the p value is less than 0.05 and as small as 0, we have strong evidence to reject the null hypothesis and say that the distribution for `calories` is different for missing and not missing `rating`. Thus missingness in `rating` is MAR, dependent on `calories`.
+
+
+#### MCAR
+Then we want to see if the missingness in description is dependent on number of steps to cook, or `n_steps` in the `recipes` dataframe.
+- **Null hypothesis**: the distribution of `n_steps` is the same when `description` is missing and not missing.
+- **Alternative hypothesis**: the distribution of `n_steps `is not the same when `description` is missing and not missing.
+
+We visualize the distribution of two distributions to determine type of test to perform. 
+
+<iframe
+  src="assets/steps_descrip.html"
+  width="900"
+  height="500"
+  frameborder="0"
+></iframe>
+
+From the histogram we notice that two distributions have similar shape. Thus we would use **permutation test** with **absolute values in means** as test statistics. The significance level is **0.05**. 
+
+<iframe
+  src="assets/perm_2.html"
+  width="900"
+  height="450"
+  frameborder="0"
+></iframe>
+
+The p_value from the permutation test is 0.216, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of n_steps are different when description is missing and not missing. Thus the missingness dependency between description and n_steps are MCAR. 
+
+
+
+
+
+## Hypothesis Test
+
+We are interested in whether the amount of calories in a recipe is higher when cheese is included as an ingredient. To test this hypothesis, we use a permutation test.
+
+**Null Hypothesis**: the amount of calories in a recipe is not higher when it contains cheese.
+**Alternative Hypothesis**: the amount of calories in a recipe is higher when it contains cheese.
+**Test Statistic**: mean calories with cheese - mean calories without cheese
+**Significance Level**: 0.05
+
+The alternative hypothesis represents our assumption that recipes with cheese have higher calorie content. The null hypothesis is the reverse, stating there is no such relationship between the presence of cheese and the calorie content of a recipe. We use the difference in mean calories (mean calories with cheese - mean calories without cheese) as the test statistic because the mean effectively summarizes the central tendency of the data for each group. A large positive value of this statistic would indicate that recipes with cheese tend to have higher calorie content. We choose a significance level of 0.05 because it is a standard threshold for statistical significance.
+
+In the permutation test, we randomly shuffle the calorie values and assign them to recipes (with or without cheese) for 1,000 iterations. The p-value obtained from this test is 0.0, meaning that none of the randomly generated differences in means is large or equal to the observed difference. This provides strong evidence against the null hypothesis. Therefore, we reject the null hypothesis and conclude that the amount of calories in a recipe is significantly higher when it contains cheese.
+
+## Framing a Prediction
+
+We plan to predict the amount of calories for each recipe using a linear regression model. Since the amount of calories can be any positive value, linear regression is a suitable choice for this continuous target variable.
+
+The target variable for our model is the amount of calories in each recipe. We chose this as our prediction target because calories are an important factor when deciding whether to use a recipe for a meal. Recipes with too many calories may raise health concerns, while recipes with too few calories may not suffice as a complete meal. Additionally, calories are intuitively related to other nutritional components, such as fats, proteins, and carbohydrates. From our preliminary investigation, we also found that the presence of cheese in a recipe is correlated with calorie content. This suggests that we can predict calorie amounts based on the presence of cheese and other nutritional features.
+
+We evaluated our model using Root Mean Squared Error (RMSE). RMSE measures the average magnitude of the prediction errors in the same units as the target variable (calories), making it easy to interpret. We chose RMSE over $R^2$ because RMSE provides a direct measure of prediction error, while $R^2$ only explains the proportion of variance in the target variable. Additionally, we chose RMSE over Mean Absolute Error (MAE) because RMSE penalizes large errors more heavily, which aligns with our goal of avoiding significant inaccuracies in calorie predictions.
+
+Since the nutritions are calculated separately, it is reasonable to use other nutrition and ingredients to predict the amount of calories.
+
+## Baseline Model
+
+In our baseline model, we use linear regression to predict the amount of calories, a quantitative value, in recipes. We chose linear regression because it is simple, interpretable, and suitable for predicting continuous target variables like calories. The data is split into training and testing sets with an 80/20 ratio.
+
+The model uses two quantitative features to predict:
+1. total_fat
+2. sugar
+
+There are no ordinal or nominal features in this model, so no encoding or transformation is required. The features are used directly in the LinearRegression() function.
+
+The RMSE of train set is 203.8 and RMSE of test set is 196.2. The similar performance on the training and testing sets indicates that there is no significant overfitting. However, the RMSE of approximately 200 calories is relatively high, meaning the model's predictions may not be precise enough for practical use. This is likely because the model uses only two features (total_fat and sugar) without further transformation and does not account for other factors that may influence calorie content. We should be able to improve the model performance by carefully choosing features and try some transformation.
+
+## Final Model
+
+We consider columns 'total_fat', 'sugar', 'sodium', 'protein', 'saturated_fat', 'carbohydrates' as features that may contribute to predicting because calories are derived from macronutrients (fats, proteins, and carbohydrates) and other nutritional components. By including these features, we capture the primary sources of calories in recipes, making them highly relevant for the prediction task. Besides them, we also include 'cheese' because it is a calorie-dense ingredient, and its presence in a recipe is likely to significantly impact the total calorie count. Including this feature allows the model to account for the additional calories contributed by cheese.
+
+We use Linear regression to make the prediction. To optimize the model, we performed hyperparameter tuning using GridSearchCV and find that the best hyperparameter is True for fit_intercept and False for positive.
+
+To improve the model's performance, we experimented with different combinations of features and transformations:\
+We tried combinations of degree one and found 'total_fat', 'protein', 'carbohydrates' and 'cheese' performed best.\
+We tried applying QuantileTransform to different combination of features, and not surprisingly it doesn't produce a better result.\
+We wondered would larger degree give better result and tried adding different combinations of features of degree 2 to 'total_fat', 'protein', 'carbohydrates' and 'cheese'. [carbohydrates with degree 2, carbohydrates, total_fat, protein, cheese] achieved smallest RMSE.\
+We further tried different combinations of features of degree 2 and 3 and add them to 'total_fat', 'protein', 'carbohydrates' and 'cheese' of degree 1. We didn't achieve better result than ['total_fat', 'protein', 'carbohydrates', 'cheese'].\
+We didn't try degree 4 because as none in degree 3 outperforming orginal combination, it is unlikely we will find a better combination in degree 4. We can also see that when we try different d for PolynomialFeatures(d), 1 achieves smallest RMSE for test set.
+
+So our final model is a linear regression using [carbohydrates with degree 2, carbohydrates, total_fat, protein, cheese], in which [carbohydrates, total_fat, protein] are quantitative values that don't need further transformation. cheese is booleans but since the program takes True as 1 and False as 0, it also don't need further transformation. carbohydrates with degree 2 is got by apply make_column_transformer to carbohydrates.
+
+The final model performs better than baseline model. It achieves RMSE of 48.40 for train set and of 43.58 for test set.
+
+## Fairness Analysis
+
+For fairness analysis, we split the data into two groups: recipes with low sugar (less or equal to 23) and recipes with high sugar (more than 23). We pick 23 as the split point because it is the median of sugar in dataset. Since we uses linear regression model, we decide to rate our test using rooted mean squared error.\
+To check the p value, we use permutation testing here. We shuffle whether each recipe has high or low sugar and calculate simulated result based on shuffled category.
+
+**Null hypothesis**: Our model is fair. It predicts calories for recipes with low sugar and high sugar with similar RMSE.\
+**Alternative hypothesis**: our model is biased. It predicts calories for recipes with high sugar with higher RMSE than recipes with low sugar.\
+**Test statistic**: RMSE of recipes with high sugar-RMSE of recipes with low sugar\
+**Significance level**: 0.05
+
+<iframe
+  src="assets/sugar_fair.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+We also want to see if our prediction is fair for cheese. More precisely, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use RMSE as evaluation metric and permutation test to simulate the difference in random state.
+
+**Null hypothesis**: Our model is fair. It predicts calories for recipes with and without cheese with similar RMSE.\
+**Alternative hypothesis**: our model is biased. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.\
+**Test statistic**: RMSE of recipes with cheese - RMSE of recipes without cheese\
+**Significance level**: 0.05
+
+<iframe
+  src="assets/cheese_fair.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+Since we get a p value of 0.0, we reject null hypothesis. Our model is biased because it predicts calories for recipes with cheese better comparing to recipes without cheese.

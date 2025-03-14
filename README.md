@@ -25,7 +25,7 @@ Our goal in this project is to answer the question of **whether food with cheese
  - `RAW_recipes` dataset: 83,782 rows and 12 columns, containing information about each recipe. 
 
  | Column           | Description                                                                                                                                                                                       |
-|:-----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|:----------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 'name'           | Recipe name                                                                                                                                                                                       |
 | 'id'             | Recipe ID                                                                                                                                                                                         |
 | 'minutes'        | Minutes to prepare recipe                                                                                                                                                                         |
@@ -57,22 +57,22 @@ To address our problem, we need to focus on column `nutrition` and `ingredient`,
 - Removing column `Unnamed: 0` since it does not contain any useful information.
 2. Examine the types of the `RAW_recipes` column values  
 
-  | column         | type   |
-  |:--------------:|:------:|
-  | name           | object |
-  | id             | int64  |
-  | minutes        | int64  |
-  | contributor_id | int64  |
-  | submitted      | object |
-  | tags           | object |
-  | nutrition      | object |
-  | n_steps        | int64  |
-  | steps          | object |
-  | description    | object |
-  | ingredients    | object |
-  | n_ingredients  | int64  |
+    | column         | type   |
+    |:--------------:|:------:|
+    | name           | object |
+    | id             | int64  |
+    | minutes        | int64  |
+    | contributor_id | int64  |
+    | submitted      | object |
+    | tags           | object |
+    | nutrition      | object |
+    | n_steps        | int64  |
+    | steps          | object |
+    | description    | object |
+    | ingredients    | object |
+    | n_ingredients  | int64  |
 
-We notice that the `nutrition` and `ingredients` are `object`, so we want to do transforming of these columns.
+    We notice that the `nutrition` and `ingredients` are `object`, so we want to do transforming of these columns.
 
 3. Convert each nutrition into single column
 - For `nutrition`, each row is a lise-list srings storing values in the form `[calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]`. Since all values are important for later investigation, we want to get access to them easier, so we: 
@@ -112,7 +112,7 @@ First, we will examine the distribution of  calories from the `recipes` datafram
 <iframe
   src="assets/hist_calories_total.html"
   width="800"
-  height="600"
+  height="450"
   frameborder="0"
 ></iframe>
 
@@ -123,7 +123,7 @@ Then we remove the outliers to focus on values less and equal to 990.
 <iframe
   src="assets/hist_calories.html"
   width="800"
-  height="600"
+  height="450"
   frameborder="0"
 ></iframe>
 
@@ -135,8 +135,8 @@ For bivariate analysis, we will examine the distribution of calories with and wi
 
 <iframe
   src="assets/fig_with_without_cheese.html"
-  width="800"
-  height="600"
+  width="900"
+  height="500"
   frameborder="0"
 ></iframe>
 
@@ -147,21 +147,104 @@ For bivariate analysis, we will examine the distribution of calories with and wi
 ### Grouping and Aggregates
 An interesting aggregate that we find is shown in the pivot table below. 
 
-|   Year |   ('diff_prop', 0.0) |   ('diff_prop', 1.0) |   ('diff_prop', 2.0) |   ('diff_prop', 3.0) |   ('diff_prop', 4.0) |   ('diff_prop', 5.0) |
-|-------:|---------------------:|---------------------:|---------------------:|---------------------:|---------------------:|---------------------:|
-|   2008 |          -0.00417087 |           0.0373018  |          0.0314886   |           0.0339742  |           0.0296494  |           0.00595056 |
-|   2009 |          -0.00117979 |           0.0121839  |         -0.00573415  |           0.0251196  |           0.00886583 |           0.0102082  |
-|   2010 |          -0.00931341 |           0.00106069 |          0.0427559   |          -0.00798016 |          -0.00647318 |          -0.00948729 |
-|   2011 |           0.00977973 |          -0.00940128 |          0.00721202  |           0.0137947  |          -0.00071431 |          -0.00714992 |
-|   2012 |           0.023112   |          -0.00471617 |          0.016432    |          -0.00377306 |          -0.00190885 |           0.0127113  |
-|   2013 |           0.022195   |           0.00508453 |          0.000573415 |          -0.014781   |          -0.00979702 |           0.00557635 |
-|   2014 |           0.00269153 |           0.0326774  |          0.00872339  |          -0.0103835  |          -0.00499667 |           0.00335626 |
-|   2015 |          -0.0104338  |          -0.0132254  |         -0.0242568   |          -0.0121251  |          -0.00482612 |          -0.00185076 |
-|   2016 |          -0.0105039  |          -0.0162877  |         -0.0174133   |          -0.00873181 |          -0.00184123 |          -0.00384644 |
-|   2017 |          -0.0131052  |          -0.0247924  |         -0.0407065   |          -0.00617981 |          -0.00443334 |          -0.00802292 |
-|   2018 |          -0.00907127 |          -0.0198854  |         -0.0190744   |          -0.00893407 |          -0.00352448 |          -0.0074453  |
+|   Year |   ('diff_prop', 1.0) |   ('diff_prop', 2.0) |   ('diff_prop', 3.0) |   ('diff_prop', 4.0) |   ('diff_prop', 5.0) |
+|:------:|:--------------------:|:--------------------:|:--------------------:|:--------------------:|:--------------------:|
+|   2008 |                 0.04 |                 0.03 |                 0.03 |                 0.03 |                 0.01 |
+|   2009 |                 0.01 |                -0.01 |                 0.03 |                 0.01 |                 0.01 |
+|   2010 |                 0    |                 0.04 |                -0.01 |                -0.01 |                -0.01 |
+|   2011 |                -0.01 |                 0.01 |                 0.01 |                -0    |                -0.01 |
+|   2012 |                -0    |                 0.02 |                -0    |                -0    |                 0.01 |
+|   2013 |                 0.01 |                 0    |                -0.01 |                -0.01 |                 0.01 |
+|   2014 |                 0.03 |                 0.01 |                -0.01 |                -0    |                 0    |
+|   2015 |                -0.01 |                -0.02 |                -0.01 |                -0    |                -0    |
+|   2016 |                -0.02 |                -0.02 |                -0.01 |                -0    |                -0    |
+|   2017 |                -0.02 |                -0.04 |                -0.01 |                -0    |                -0.01 |
+|   2018 |                -0.02 |                -0.02 |                -0.01 |                -0    |                -0.01 |
 
+<br>
 The pivot table is aimed to examine the `diff_prop` which is calculated by `prop_cheese_recipes - prop_nocheese_recipes` across years from 2008 to 2018, given the level of rating. Positive values indicate there are more recipes with cheese, and on the other hand negative values indicate more recipes without cheese. 
+
+
+## Assessment of Missingness
+
+### NMAR Analysis
+We believe the missingness in the `review column` is NMAR. There are a few possible reasons for people not to fill in the review section. For example, people tend not to post reviews if they feel neutural or nothing special about the recipes, and thus choose not to take extra steps wrting the reviews and publish on the site. Also, it is less likely for people to write reviews if they have negative experience with the recipes, either because they want to avoid conflicts against those who like the food, or it is worth wasting their time doing so. On the other hand, people who like the recipes or have anything interesting to share tend to leave comments. Thus the missingess depends on the values of the `review` column, making it NMAR. 
+
+We could obtain additional data to to make the missingness MAR. One possible approach is to send out polls through personal emails provided during registration process, or communicate through messages on the Food website, to ask if they could share their experience with the recipes and reason why they don't want to write reviews. 
+
+
+### Missingness Dependency
+
+In this part, we will examine the missingness dependency between columns, using permutation tests. 
+
+#### MAR
+The first two columns that we want to focus on are `calories` and `rating`, and we want to determine whether the missingness in `rating` is dependent on distribution of `calories`. 
+
+**Null Hypothesis**: the distribution of  `calories` is the same when `rating` is missing and not missing.
+**Alternative Hypothesis**: the distribution of `calories` is not the same when `rating` is missing and not missing.
+
+Before performing the permutation test, we want to visualize the distribution of calories for recipes missing and not missing.
+
+
+<iframe
+  src="assets/rating_calories_total.html"
+  width="900"
+  height="500"
+  frameborder="0"
+></iframe>
+
+But because there are a lot of outliers in `calories`, the values are compressed to the left and make the distributions hard to see. So we remove the outliers and generate another plot as shown below. 
+
+
+<iframe
+  src="assets/rating_calories_no_outleirs.html"
+  width="900"
+  height="500"
+  frameborder="0"
+></iframe>
+
+The shape of two distributions look similar, so we will use **permutation test** with **absolute value of difference in means** as our test statistics, and the rejection threshold is **0.05**.
+
+In the permutation test, we shuffle the `calories` column and calculate the test statstics for 1000 times. Then we plot the distribution of the calculated statistics and the observed one. 
+
+<iframe
+  src="assets/permu_test_1.html"
+  width="900"
+  height="500"
+  frameborder="0"
+></iframe>
+
+Since the p value is less than 0.05 and as small as 0, we have strong evidence to reject the null hypothesis and say that the distribution for `calories` is different for missing and not missing `rating`. Thus missingness in `rating` is MAR, dependent on `calories`.
+
+
+#### MCAR
+Then we want to see if the missingness in description is dependent on number of steps to cook, or `n_steps` in the `recipes` dataframe.
+- **Null hypothesis**: the distribution of `n_steps` is the same when `description` is missing and not missing.
+- **Alternative hypothesis**: the distribution of `n_steps `is not the same when `description` is missing and not missing.
+
+We visualize the distribution of two distributions to determine type of test to perform. 
+
+<iframe
+  src="assets/steps_descrip.html"
+  width="900"
+  height="500"
+  frameborder="0"
+></iframe>
+
+From the histogram we notice that two distributions have similar shape. Thus we would use **permutation test** with **absolute values in means** as test statistics. The significance level is **0.05**. 
+
+<iframe
+  src="assets/perm_2.html"
+  width="900"
+  height="450"
+  frameborder="0"
+></iframe>
+
+The p_value from the permutation test is 0.216, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of n_steps are different when description is missing and not missing. Thus the missingness dependency between description and n_steps are MCAR. 
+
+
+
+
 
 ## Hypothesis Test
 
