@@ -222,3 +222,75 @@ An interesting aggregate that we find is shown in the pivot table below.
 |   2018 |          -0.00907127 |          -0.0198854  |         -0.0190744   |          -0.00893407 |          -0.00352448 |          -0.0074453  |
 
 The pivot table is aimed to examine the `diff_prop` which is calculated by `prop_cheese_recipes - prop_nocheese_recipes` across years from 2008 to 2018, given the level of rating. Positive values indicate there are more recipes with cheese, and on the other hand negative values indicate more recipes without cheese. 
+
+## Framing a Prediction
+
+We plan to predict the amount of calories for each recipe using a linear regression model. Since the amount of calories can be any positive value, linear regression is a suitable choice for this continuous target variable.
+
+The target variable for our model is the amount of calories in each recipe. We chose this as our prediction target because calories are an important factor when deciding whether to use a recipe for a meal. Recipes with too many calories may raise health concerns, while recipes with too few calories may not suffice as a complete meal. Additionally, calories are intuitively related to other nutritional components, such as fats, proteins, and carbohydrates. From our preliminary investigation, we also found that the presence of cheese in a recipe is correlated with calorie content. This suggests that we can predict calorie amounts based on the presence of cheese and other nutritional features.
+
+We evaluated our model using Root Mean Squared Error (RMSE). RMSE measures the average magnitude of the prediction errors in the same units as the target variable (calories), making it easy to interpret. We chose RMSE over $R^2$ because RMSE provides a direct measure of prediction error, while $R^2$ only explains the proportion of variance in the target variable. Additionally, we chose RMSE over Mean Absolute Error (MAE) because RMSE penalizes large errors more heavily, which aligns with our goal of avoiding significant inaccuracies in calorie predictions.
+
+Since the nutritions are calculated separately, it is reasonable to use other nutrition and ingredients to predict the amount of calories.
+
+## Baseline Model
+
+In our baseline model, we use linear regression to predict the amount of calories, a quantitative value, in recipes. We chose linear regression because it is simple, interpretable, and suitable for predicting continuous target variables like calories. The data is split into training and testing sets with an 80/20 ratio.
+
+The model uses two quantitative features to predict:
+1. total_fat
+2. sugar
+
+There are no ordinal or nominal features in this model, so no encoding or transformation is required. The features are used directly in the LinearRegression() function.
+
+The RMSE of train set is 203.8 and RMSE of test set is 196.2. The similar performance on the training and testing sets indicates that there is no significant overfitting. However, the RMSE of approximately 200 calories is relatively high, meaning the model's predictions may not be precise enough for practical use. This is likely because the model uses only two features (total_fat and sugar) without further transformation and does not account for other factors that may influence calorie content. We should be able to improve the model performance by carefully choosing features and try some transformation.
+
+## Final Model
+
+We consider columns 'total_fat', 'sugar', 'sodium', 'protein', 'saturated_fat', 'carbohydrates' as features that may contribute to predicting because calories are derived from macronutrients (fats, proteins, and carbohydrates) and other nutritional components. By including these features, we capture the primary sources of calories in recipes, making them highly relevant for the prediction task. Besides them, we also include 'cheese' because it is a calorie-dense ingredient, and its presence in a recipe is likely to significantly impact the total calorie count. Including this feature allows the model to account for the additional calories contributed by cheese.
+
+We use Linear regression to make the prediction. To optimize the model, we performed hyperparameter tuning using GridSearchCV and find that the best hyperparameter is True for fit_intercept and False for positive.
+
+To improve the model's performance, we experimented with different combinations of features and transformations:\
+We tried combinations of degree one and found 'total_fat', 'protein', 'carbohydrates' and 'cheese' performed best.\
+We tried applying QuantileTransform to different combination of features, and not surprisingly it doesn't produce a better result.\
+We wondered would larger degree give better result and tried adding different combinations of features of degree 2 to 'total_fat', 'protein', 'carbohydrates' and 'cheese'. [carbohydrates with degree 2, carbohydrates, total_fat, protein, cheese] achieved smallest RMSE.\
+We further tried different combinations of features of degree 2 and 3 and add them to 'total_fat', 'protein', 'carbohydrates' and 'cheese' of degree 1. We didn't achieve better result than ['total_fat', 'protein', 'carbohydrates', 'cheese'].\
+We didn't try degree 4 because as none in degree 3 outperforming orginal combination, it is unlikely we will find a better combination in degree 4. We can also see that when we try different d for PolynomialFeatures(d), 1 achieves smallest RMSE for test set.
+
+So our final model is a linear regression using [carbohydrates with degree 2, carbohydrates, total_fat, protein, cheese], in which [carbohydrates, total_fat, protein] are quantitative values that don't need further transformation. cheese is booleans but since the program takes True as 1 and False as 0, it also don't need further transformation. carbohydrates with degree 2 is got by apply make_column_transformer to carbohydrates.
+
+The final model performs better than baseline model. It achieves RMSE of 48.40 for train set and of 43.58 for test set.
+
+## Fairness Analysis
+
+For fairness analysis, we split the data into two groups: recipes with low sugar (less or equal to 23) and recipes with high sugar (more than 23). We pick 23 as the split point because it is the median of sugar in dataset. Since we uses linear regression model, we decide to rate our test using rooted mean squared error.\
+To check the p value, we use permutation testing here. We shuffle whether each recipe has high or low sugar and calculate simulated result based on shuffled category.
+
+**Null hypothesis**: Our model is fair. It predicts calories for recipes with low sugar and high sugar with similar RMSE.\
+**Alternative hypothesis**: our model is biased. It predicts calories for recipes with high sugar with higher RMSE than recipes with low sugar.\
+**Test statistic**: RMSE of recipes with high sugar-RMSE of recipes with low sugar\
+**Significance level**: 0.05
+
+<iframe
+  src="assets/sugar_fair.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+We also want to see if our prediction is fair for cheese. More precisely, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use RMSE as evaluation metric and permutation test to simulate the difference in random state.
+
+**Null hypothesis**: Our model is fair. It predicts calories for recipes with and without cheese with similar RMSE.\
+**Alternative hypothesis**: our model is biased. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.\
+**Test statistic**: RMSE of recipes with cheese - RMSE of recipes without cheese\
+**Significance level**: 0.05
+
+<iframe
+  src="assets/cheese_fair.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+Since we get a p value of 0.0, we reject null hypothesis. Our model is biased because it predicts calories for recipes with cheese better comparing to recipes without cheese.
