@@ -22,7 +22,7 @@ Our goal in this project is to answer the question of **whether food with cheese
 
 
 #### Introduction to the Columns
- - `RAW_recipes` dataset: 83,782 rows and 12 columns, containing information about each recipe. 
+ - `RAW_recipes` dataset: 83,782 rows and 10 columns, containing information about each recipe. 
 
  | Column           | Description                                                                                                                                                                                       |
 |:----------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -75,7 +75,7 @@ To address our problem, we need to focus on column `nutrition` and `ingredient`,
     We notice that the `nutrition` and `ingredients` are `object`, so we want to do transforming of these columns.
 
 3. Convert each nutrition into single column
-- For `nutrition`, each row is a lise-list srings storing values in the form `[calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]`. Since all values are important for later investigation, we want to get access to them easier, so we: 
+- For `nutrition`, each row is a list-like srings storing values in the form `[calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]`. Since all values are important for later investigation, we want to get access to them easier, so we: 
   - remove the first and last character of the original nutrition and split the rest by ','.
   - use `apply` to get the value for each component and convert them to `float`.
   - add new columns: `calories`, `total_fat`, `sugar`, `sodium`, `protein`, `saturated_fat`, `carbohydrates` into `RAW_recipes`.
@@ -88,14 +88,14 @@ To address our problem, we need to focus on column `nutrition` and `ingredient`,
 5. Merge dataframes into a dataset called `combine`
 - We left merge `RAW_interactions` to `recipes` on `id` in `recipes` and `recipe_id` in `RAW_interactions`.
 
-6. Replace all ratings of 0.0 to `nan` in `RAW_interactions`
+6. Replace all ratings of 0.0 to `nan` in `combine`
 - Valid ratings only include 1, 2, 3, 4, 5, and ratings of 0.0 indicates that no rating is given in the interaction, which contains no actual meaning.
 
 7. Compute average rating
 - We calculate the average rating for each recipe as new column `avg_rating`, so it can better demonstrate the overall ratings of the recipe.
 - Merge the `avg_rating` to the `combine`.
 
-After cleaning, there are 234429 rows and 29 columns in `combine`. Here we display the first five rows of the dataframe with 10 columns that will be mainly used for further investigation. 
+After cleaning, there are 234429 rows and 26 columns in `combine`. Here we display the first five rows of the dataframe with 10 columns that will be mainly used for further investigation. 
 
 | name                                 |   calories |   total_fat |   sugar |   sodium |   protein |   saturated_fat |   carbohydrates | cheese   |   rating |
 |:------------------------------------:|:----------:|:-----------:|:-------:|:--------:|:---------:|:---------------:|:---------------:|:--------:|:--------:|
@@ -140,9 +140,7 @@ For bivariate analysis, we will examine the distribution of calories with and wi
   frameborder="0"
 ></iframe>
 
- We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories. 
-
- [more analysis here??]
+ We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese, indicating that calories of recipes with cheese may be higher than calories of those without cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories. 
 
 ### Grouping and Aggregates
 An interesting aggregate that we find is shown in the pivot table below. 
@@ -187,8 +185,8 @@ Before performing the permutation test, we want to visualize the distribution of
 
 
 <iframe
-  src="assets/rating_calories_total.html"
-  width="900"
+  src="assets/rating_calories_total_2.html"
+  width="1000"
   height="500"
   frameborder="0"
 ></iframe>
@@ -198,7 +196,7 @@ But because there are a lot of outliers in `calories`, the values are compressed
 
 <iframe
   src="assets/rating_calories_no_outleirs.html"
-  width="900"
+  width="1000"
   height="500"
   frameborder="0"
 ></iframe>
@@ -217,10 +215,10 @@ In the permutation test, we shuffle the `calories` column and calculate the test
 Since the p value is less than 0.05 and as small as 0, we have strong evidence to reject the null hypothesis and say that the distribution for `calories` is different for missing and not missing `rating`. Thus missingness in `rating` is MAR, dependent on `calories`.
 
 
-#### MCAR
+<br>
 Then we want to see if the missingness in description is dependent on number of steps to cook, or `n_steps` in the `recipes` dataframe.
-- **Null hypothesis**: the distribution of `n_steps` is the same when `description` is missing and not missing.
-- **Alternative hypothesis**: the distribution of `n_steps `is not the same when `description` is missing and not missing.
+**Null hypothesis**: the distribution of `n_steps` is the same when `description` is missing and not missing.
+**Alternative hypothesis**: the distribution of `n_steps `is not the same when `description` is missing and not missing.
 
 We visualize the distribution of two distributions to determine type of test to perform. 
 
@@ -231,7 +229,7 @@ We visualize the distribution of two distributions to determine type of test to 
   frameborder="0"
 ></iframe>
 
-From the histogram we notice that two distributions have similar shape. Thus we would use **permutation test** with **absolute values in means** as test statistics. The significance level is **0.05**. 
+From the histogram we notice that two distributions have similar shape. Thus we would use **permutation test** with **absolute values in means** as test statistics, or the mean of `n_steps` when `description` is missing and not missing. The significance level is **0.05**. 
 
 <iframe
   src="assets/perm_2.html"
@@ -240,24 +238,30 @@ From the histogram we notice that two distributions have similar shape. Thus we 
   frameborder="0"
 ></iframe>
 
-The p_value from the permutation test is 0.216, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of n_steps are different when description is missing and not missing. Thus the missingness dependency between description and n_steps are MCAR. 
+The p_value from the permutation test is 0.216, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of `n_steps` are different when description is missing and not missing. Thus the missingness dependency between `description` and `n_steps` are MCAR. 
 
 
 
 
+## Hypothesis Testing
 
-## Hypothesis Test
+Recalling the goal of our project, we will investigate whether the amount of calories in a recipe is larger when there is cheese in the ingredients. The columns we will use are `calories` and `cheese`. We decided to test our hypothesis using a permutation test.
 
-We are interested in whether the amount of calories in a recipe is higher when cheese is included as an ingredient. To test this hypothesis, we use a permutation test.
-
-**Null Hypothesis**: the amount of calories in a recipe is not higher when it contains cheese.
-**Alternative Hypothesis**: the amount of calories in a recipe is higher when it contains cheese.
-**Test Statistic**: mean calories with cheese - mean calories without cheese
+**Null Hypothesis**: the amount of calories for a recipe with cheese is the same as the amount of calories without cheese.\
+**Alternative Hypothesis**: the amount of calories for a recipe with cheese is the greater than the amount of calories without cheese.\
+**Test Statistic**: mean calories with cheese - mean calories without cheese.\
 **Significance Level**: 0.05
 
-The alternative hypothesis represents our assumption that recipes with cheese have higher calorie content. The null hypothesis is the reverse, stating there is no such relationship between the presence of cheese and the calorie content of a recipe. We use the difference in mean calories (mean calories with cheese - mean calories without cheese) as the test statistic because the mean effectively summarizes the central tendency of the data for each group. A large positive value of this statistic would indicate that recipes with cheese tend to have higher calorie content. We choose a significance level of 0.05 because it is a standard threshold for statistical significance.
+For test statistics, a large value in (mean calories with cheese - mean calories without cheese) will imply that more calories in a recipe  with cheese than recipes without cheese. 
 
-In the permutation test, we randomly shuffle the calorie values and assign them to recipes (with or without cheese) for 1,000 iterations. The p-value obtained from this test is 0.0, meaning that none of the randomly generated differences in means is large or equal to the observed difference. This provides strong evidence against the null hypothesis. Therefore, we reject the null hypothesis and conclude that the amount of calories in a recipe is significantly higher when it contains cheese.
+In our permutation test we randomly shuffle calories and assign them to recipes for 1000 times to generate an empirical distribution of the test statistics. We find p value is 0.0, which means none of our randomly generated difference is larger than the observed statistic. Therefore, we have strong evidence to reject the null hypothesis and suggest that recipes with cheese would have higher calories. 
+
+<iframe
+  src="assets/hypothesis.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
 
 ## Framing a Prediction
 
@@ -271,15 +275,9 @@ Since the nutritions are calculated separately, it is reasonable to use other nu
 
 ## Baseline Model
 
-In our baseline model, we use linear regression to predict the amount of calories, a quantitative value, in recipes. We chose linear regression because it is simple, interpretable, and suitable for predicting continuous target variables like calories. The data is split into training and testing sets with an 80/20 ratio.
+In our baseline model, we want to use linear regression to predict the amount of calories, a quantitative value, in recipes using features total_fat and sugar. All features here (calories, total_fat, sugar) are quantitative, so we don’t need to do any transformation here and can use them directly in the LinearRegression() function. We chose linear regression for the baseline model because all features we are using are continuous. It is hard to predict the amount of calories, a quantitative value, by classification. The data is split into training and testing sets with ratios of 0.8 and 0.2.
 
-The model uses two quantitative features to predict:
-1. total_fat
-2. sugar
-
-There are no ordinal or nominal features in this model, so no encoding or transformation is required. The features are used directly in the LinearRegression() function.
-
-The RMSE of train set is 203.8 and RMSE of test set is 196.2. The similar performance on the training and testing sets indicates that there is no significant overfitting. However, the RMSE of approximately 200 calories is relatively high, meaning the model's predictions may not be precise enough for practical use. This is likely because the model uses only two features (total_fat and sugar) without further transformation and does not account for other factors that may influence calorie content. We should be able to improve the model performance by carefully choosing features and try some transformation.
+The RMSE of the train set is 203.8 and the RMSE of the test set is 196.2. The similar performance on the training and testing sets indicates that there is no significant overfitting. However, the RMSE of approximately 200 calories is relatively high, so we may still improve our model. Besides, the model uses only two features (total_fat and sugar) without carefully choosing or further transformation. So we should be able to improve the model performance by carefully choosing features and trying some transformation.
 
 ## Final Model
 
@@ -300,8 +298,9 @@ The final model performs better than baseline model. It achieves RMSE of 48.40 f
 
 ## Fairness Analysis
 
-For fairness analysis, we split the data into two groups: recipes with low sugar (less or equal to 23) and recipes with high sugar (more than 23). We pick 23 as the split point because it is the median of sugar in dataset. Since we uses linear regression model, we decide to rate our test using rooted mean squared error.\
-To check the p value, we use permutation testing here. We shuffle whether each recipe has high or low sugar and calculate simulated result based on shuffled category.
+For fairness analysis, we split the data into two groups: recipes with low sugar (less or equal to 23) and recipes with high sugar (more than 23). We pick 23 as the split point because it is the median of sugar in the dataset. Since we use a linear regression model, we decide to rate our test using rooted mean squared error. It is easier to understand compared to $R^2$ and it is better to keep a consistency with prediction part.\
+To check the p value, we use permutation testing here. For each recipe we list their actual calories and predicted calories. Then we can calculate squared error for each recipe. By calculating the square root of mean value for each group (low sugar and high sugar), we get two RMSE values and so their difference. We shuffle whether each recipe has high or low sugar and calculate simulated results based on the shuffled category following the same way.
+
 
 **Null hypothesis**: Our model is fair. It predicts calories for recipes with low sugar and high sugar with similar RMSE.\
 **Alternative hypothesis**: our model is biased. It predicts calories for recipes with high sugar with higher RMSE than recipes with low sugar.\
@@ -314,8 +313,12 @@ To check the p value, we use permutation testing here. We shuffle whether each r
   height="600"
   frameborder="0"
 ></iframe>
+As a result, we get a p value of 0.201, which is larger than the significance level. We fail to reject the null hypothesis.
 
-We also want to see if our prediction is fair for cheese. More precisely, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use RMSE as evaluation metric and permutation test to simulate the difference in random state.
+
+We also want to see if our prediction is fair for cheese. More precisely, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use RMSE as an evaluation metric and permutation test to simulate the difference in random state.\
+We run a permutation test in a similar way as we did in fairness analysis for sugar. The only difference is that instead of grouping recipes based on sugar, we group them based on the existence of cheese.
+
 
 **Null hypothesis**: Our model is fair. It predicts calories for recipes with and without cheese with similar RMSE.\
 **Alternative hypothesis**: our model is biased. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.\
@@ -328,4 +331,4 @@ We also want to see if our prediction is fair for cheese. More precisely, if our
   height="600"
   frameborder="0"
 ></iframe>
-Since we get a p value of 0.0, we reject null hypothesis. Our model is biased because it predicts calories for recipes with cheese better comparing to recipes without cheese.
+As a result, we get a p value of 0.0, which is lower than the significance level. We reject the null hypothesis and conclude that our model is unfair. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.

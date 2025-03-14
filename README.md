@@ -22,7 +22,7 @@ Our goal in this project is to answer the question of **whether food with cheese
 
 
 #### Introduction to the Columns
- - `RAW_recipes` dataset: 83,782 rows and 12 columns, containing information about each recipe. 
+ - `RAW_recipes` dataset: 83,782 rows and 10 columns, containing information about each recipe. 
 
  | Column           | Description                                                                                                                                                                                       |
 |:----------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -75,7 +75,7 @@ To address our problem, we need to focus on column `nutrition` and `ingredient`,
     We notice that the `nutrition` and `ingredients` are `object`, so we want to do transforming of these columns.
 
 3. Convert each nutrition into single column
-- For `nutrition`, each row is a lise-list srings storing values in the form `[calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]`. Since all values are important for later investigation, we want to get access to them easier, so we: 
+- For `nutrition`, each row is a list-like srings storing values in the form `[calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]`. Since all values are important for later investigation, we want to get access to them easier, so we: 
   - remove the first and last character of the original nutrition and split the rest by ','.
   - use `apply` to get the value for each component and convert them to `float`.
   - add new columns: `calories`, `total_fat`, `sugar`, `sodium`, `protein`, `saturated_fat`, `carbohydrates` into `RAW_recipes`.
@@ -88,14 +88,14 @@ To address our problem, we need to focus on column `nutrition` and `ingredient`,
 5. Merge dataframes into a dataset called `combine`
 - We left merge `RAW_interactions` to `recipes` on `id` in `recipes` and `recipe_id` in `RAW_interactions`.
 
-6. Replace all ratings of 0.0 to `nan` in `RAW_interactions`
+6. Replace all ratings of 0.0 to `nan` in `combine`
 - Valid ratings only include 1, 2, 3, 4, 5, and ratings of 0.0 indicates that no rating is given in the interaction, which contains no actual meaning.
 
 7. Compute average rating
 - We calculate the average rating for each recipe as new column `avg_rating`, so it can better demonstrate the overall ratings of the recipe.
 - Merge the `avg_rating` to the `combine`.
 
-After cleaning, there are 234429 rows and 29 columns in `combine`. Here we display the first five rows of the dataframe with 10 columns that will be mainly used for further investigation. 
+After cleaning, there are 234429 rows and 26 columns in `combine`. Here we display the first five rows of the dataframe with 10 columns that will be mainly used for further investigation. 
 
 | name                                 |   calories |   total_fat |   sugar |   sodium |   protein |   saturated_fat |   carbohydrates | cheese   |   rating |
 |:------------------------------------:|:----------:|:-----------:|:-------:|:--------:|:---------:|:---------------:|:---------------:|:--------:|:--------:|
@@ -140,9 +140,7 @@ For bivariate analysis, we will examine the distribution of calories with and wi
   frameborder="0"
 ></iframe>
 
- We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories. 
-
- [more analysis here??]
+ We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese, indicating that calories of recipes with cheese may be higher than calories of those without cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories. 
 
 ### Grouping and Aggregates
 An interesting aggregate that we find is shown in the pivot table below. 
@@ -187,8 +185,8 @@ Before performing the permutation test, we want to visualize the distribution of
 
 
 <iframe
-  src="assets/rating_calories_total.html"
-  width="900"
+  src="assets/rating_calories_total_2.html"
+  width="1000"
   height="500"
   frameborder="0"
 ></iframe>
@@ -198,7 +196,7 @@ But because there are a lot of outliers in `calories`, the values are compressed
 
 <iframe
   src="assets/rating_calories_no_outleirs.html"
-  width="900"
+  width="1000"
   height="500"
   frameborder="0"
 ></iframe>
@@ -217,10 +215,10 @@ In the permutation test, we shuffle the `calories` column and calculate the test
 Since the p value is less than 0.05 and as small as 0, we have strong evidence to reject the null hypothesis and say that the distribution for `calories` is different for missing and not missing `rating`. Thus missingness in `rating` is MAR, dependent on `calories`.
 
 
-#### MCAR
+<br>
 Then we want to see if the missingness in description is dependent on number of steps to cook, or `n_steps` in the `recipes` dataframe.
-- **Null hypothesis**: the distribution of `n_steps` is the same when `description` is missing and not missing.
-- **Alternative hypothesis**: the distribution of `n_steps `is not the same when `description` is missing and not missing.
+**Null hypothesis**: the distribution of `n_steps` is the same when `description` is missing and not missing.
+**Alternative hypothesis**: the distribution of `n_steps `is not the same when `description` is missing and not missing.
 
 We visualize the distribution of two distributions to determine type of test to perform. 
 
@@ -231,7 +229,7 @@ We visualize the distribution of two distributions to determine type of test to 
   frameborder="0"
 ></iframe>
 
-From the histogram we notice that two distributions have similar shape. Thus we would use **permutation test** with **absolute values in means** as test statistics. The significance level is **0.05**. 
+From the histogram we notice that two distributions have similar shape. Thus we would use **permutation test** with **absolute values in means** as test statistics, or the mean of `n_steps` when `description` is missing and not missing. The significance level is **0.05**. 
 
 <iframe
   src="assets/perm_2.html"
@@ -240,23 +238,23 @@ From the histogram we notice that two distributions have similar shape. Thus we 
   frameborder="0"
 ></iframe>
 
-The p_value from the permutation test is 0.216, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of n_steps are different when description is missing and not missing. Thus the missingness dependency between description and n_steps are MCAR. 
-
+The p_value from the permutation test is 0.216, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of `n_steps` are different when description is missing and not missing. Thus the missingness dependency between `description` and `n_steps` are MCAR. 
 
 
 
 
 ## Hypothesis Testing
 
-We are interested in whether the amount of calories in a recipe is larger when there is cheese in the ingredients. We decided to test our hypothesis using a permutation test.
+Recalling the goal of our project, we will investigate whether the amount of calories in a recipe is larger when there is cheese in the ingredients. The columns we will use are `calories` and `cheese`. We decided to test our hypothesis using a permutation test.
 
-**Null Hypothesis**: the amount of calories for a recipe is not larger when it has cheese.\
-**Alternative Hypothesis**: the amount of calories for a recipe is larger when it has cheese.\
+**Null Hypothesis**: the amount of calories for a recipe with cheese is the same as the amount of calories without cheese.\
+**Alternative Hypothesis**: the amount of calories for a recipe with cheese is the greater than the amount of calories without cheese.\
 **Test Statistic**: mean calories with cheese - mean calories without cheese.\
 **Significance Level**: 0.05
 
-Since we are interested in whether the amount of calories in a recipe is larger when there is cheese in the ingredients, our null hypothesis should be there is no such relationship between them: the amount of calories for a recipe is not larger when it has cheese. Alternative hypotheses should be the same as our assumption. Since mean value illustrates the overall tendency of data for each group, by calculating the difference between them we can have an idea of how different the two groups are in terms of calories. More precisely, if mean calories with cheese - mean calories without cheese is a large value, it means that the amount of calories in a recipe is larger with cheese compared to recipes without cheese. We choose 0.05 as our significance level as it is a regular choice.\
-In our permutation test we randomly shuffle calories and assign them to recipes for 1000 times. We find p value is 0.0, which means none of our randomly generated difference is larger than the observed statistic. Therefore, We can reject the null hypothesis and conclude that the amount of calories for a recipe is larger when it has cheese.
+For test statistics, a large value in (mean calories with cheese - mean calories without cheese) will imply that more calories in a recipe  with cheese than recipes without cheese. 
+
+In our permutation test we randomly shuffle calories and assign them to recipes for 1000 times to generate an empirical distribution of the test statistics. We find p value is 0.0, which means none of our randomly generated difference is larger than the observed statistic. Therefore, we have strong evidence to reject the null hypothesis and suggest that recipes with cheese would have higher calories. 
 
 <iframe
   src="assets/hypothesis.html"

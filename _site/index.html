@@ -4,7 +4,7 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/assets/css/style.css?v=9029669519c8318b752839ea565fc10e44f44744" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=57a0ab6c8d36f19633f183d113702d822c7b1a1a" media="screen" type="text/css">
     <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
 
     <!--[if lt IE 9]>
@@ -80,7 +80,7 @@ offers a massive collecion of recipes categorized by popularity, ingredients, cu
 
 <h4 id="introduction-to-the-columns">Introduction to the Columns</h4>
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">RAW_recipes</code> dataset: 83,782 rows and 12 columns, containing information about each recipe.</li>
+  <li><code class="language-plaintext highlighter-rouge">RAW_recipes</code> dataset: 83,782 rows and 10 columns, containing information about each recipe.</li>
 </ul>
 
 <table>
@@ -246,7 +246,7 @@ offers a massive collecion of recipes categorized by popularity, ingredients, cu
   </li>
   <li>Convert each nutrition into single column
     <ul>
-      <li>For <code class="language-plaintext highlighter-rouge">nutrition</code>, each row is a lise-list srings storing values in the form <code class="language-plaintext highlighter-rouge">[calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]</code>. Since all values are important for later investigation, we want to get access to them easier, so we:
+      <li>For <code class="language-plaintext highlighter-rouge">nutrition</code>, each row is a list-like srings storing values in the form <code class="language-plaintext highlighter-rouge">[calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]</code>. Since all values are important for later investigation, we want to get access to them easier, so we:
         <ul>
           <li>remove the first and last character of the original nutrition and split the rest by ‘,’.</li>
           <li>use <code class="language-plaintext highlighter-rouge">apply</code> to get the value for each component and convert them to <code class="language-plaintext highlighter-rouge">float</code>.</li>
@@ -270,7 +270,7 @@ offers a massive collecion of recipes categorized by popularity, ingredients, cu
       <li>We left merge <code class="language-plaintext highlighter-rouge">RAW_interactions</code> to <code class="language-plaintext highlighter-rouge">recipes</code> on <code class="language-plaintext highlighter-rouge">id</code> in <code class="language-plaintext highlighter-rouge">recipes</code> and <code class="language-plaintext highlighter-rouge">recipe_id</code> in <code class="language-plaintext highlighter-rouge">RAW_interactions</code>.</li>
     </ul>
   </li>
-  <li>Replace all ratings of 0.0 to <code class="language-plaintext highlighter-rouge">nan</code> in <code class="language-plaintext highlighter-rouge">RAW_interactions</code>
+  <li>Replace all ratings of 0.0 to <code class="language-plaintext highlighter-rouge">nan</code> in <code class="language-plaintext highlighter-rouge">combine</code>
     <ul>
       <li>Valid ratings only include 1, 2, 3, 4, 5, and ratings of 0.0 indicates that no rating is given in the interaction, which contains no actual meaning.</li>
     </ul>
@@ -283,7 +283,7 @@ offers a massive collecion of recipes categorized by popularity, ingredients, cu
   </li>
 </ol>
 
-<p>After cleaning, there are 234429 rows and 29 columns in <code class="language-plaintext highlighter-rouge">combine</code>. Here we display the first five rows of the dataframe with 10 columns that will be mainly used for further investigation.</p>
+<p>After cleaning, there are 234429 rows and 26 columns in <code class="language-plaintext highlighter-rouge">combine</code>. Here we display the first five rows of the dataframe with 10 columns that will be mainly used for further investigation.</p>
 
 <table>
   <thead>
@@ -382,9 +382,7 @@ offers a massive collecion of recipes categorized by popularity, ingredients, cu
 
 <iframe src="assets/fig_with_without_cheese.html" width="900" height="500" frameborder="0"></iframe>
 
-<p>We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories.</p>
-
-<p>[more analysis here??]</p>
+<p>We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese, indicating that calories of recipes with cheese may be higher than calories of those without cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories.</p>
 
 <h3 id="grouping-and-aggregates">Grouping and Aggregates</h3>
 <p>An interesting aggregate that we find is shown in the pivot table below.</p>
@@ -514,11 +512,11 @@ The pivot table is aimed to examine the <code class="language-plaintext highligh
 
 <p>Before performing the permutation test, we want to visualize the distribution of calories for recipes missing and not missing.</p>
 
-<iframe src="assets/rating_calories_total.html" width="900" height="500" frameborder="0"></iframe>
+<iframe src="assets/rating_calories_total_2.html" width="1000" height="500" frameborder="0"></iframe>
 
 <p>But because there are a lot of outliers in <code class="language-plaintext highlighter-rouge">calories</code>, the values are compressed to the left and make the distributions hard to see. So we remove the outliers and generate another plot as shown below.</p>
 
-<iframe src="assets/rating_calories_no_outleirs.html" width="900" height="500" frameborder="0"></iframe>
+<iframe src="assets/rating_calories_no_outleirs.html" width="1000" height="500" frameborder="0"></iframe>
 
 <p>The shape of two distributions look similar, so we will use <strong>permutation test</strong> with <strong>absolute value of difference in means</strong> as our test statistics, and the rejection threshold is <strong>0.05</strong>.</p>
 
@@ -528,35 +526,35 @@ The pivot table is aimed to examine the <code class="language-plaintext highligh
 
 <p>Since the p value is less than 0.05 and as small as 0, we have strong evidence to reject the null hypothesis and say that the distribution for <code class="language-plaintext highlighter-rouge">calories</code> is different for missing and not missing <code class="language-plaintext highlighter-rouge">rating</code>. Thus missingness in <code class="language-plaintext highlighter-rouge">rating</code> is MAR, dependent on <code class="language-plaintext highlighter-rouge">calories</code>.</p>
 
-<h4 id="mcar">MCAR</h4>
-<p>Then we want to see if the missingness in description is dependent on number of steps to cook, or <code class="language-plaintext highlighter-rouge">n_steps</code> in the <code class="language-plaintext highlighter-rouge">recipes</code> dataframe.</p>
-<ul>
-  <li><strong>Null hypothesis</strong>: the distribution of <code class="language-plaintext highlighter-rouge">n_steps</code> is the same when <code class="language-plaintext highlighter-rouge">description</code> is missing and not missing.</li>
-  <li><strong>Alternative hypothesis</strong>: the distribution of <code class="language-plaintext highlighter-rouge">n_steps </code>is not the same when <code class="language-plaintext highlighter-rouge">description</code> is missing and not missing.</li>
-</ul>
+<p><br />
+Then we want to see if the missingness in description is dependent on number of steps to cook, or <code class="language-plaintext highlighter-rouge">n_steps</code> in the <code class="language-plaintext highlighter-rouge">recipes</code> dataframe.
+<strong>Null hypothesis</strong>: the distribution of <code class="language-plaintext highlighter-rouge">n_steps</code> is the same when <code class="language-plaintext highlighter-rouge">description</code> is missing and not missing.
+<strong>Alternative hypothesis</strong>: the distribution of <code class="language-plaintext highlighter-rouge">n_steps </code>is not the same when <code class="language-plaintext highlighter-rouge">description</code> is missing and not missing.</p>
 
 <p>We visualize the distribution of two distributions to determine type of test to perform.</p>
 
 <iframe src="assets/steps_descrip.html" width="900" height="500" frameborder="0"></iframe>
 
-<p>From the histogram we notice that two distributions have similar shape. Thus we would use <strong>permutation test</strong> with <strong>absolute values in means</strong> as test statistics. The significance level is <strong>0.05</strong>.</p>
+<p>From the histogram we notice that two distributions have similar shape. Thus we would use <strong>permutation test</strong> with <strong>absolute values in means</strong> as test statistics, or the mean of <code class="language-plaintext highlighter-rouge">n_steps</code> when <code class="language-plaintext highlighter-rouge">description</code> is missing and not missing. The significance level is <strong>0.05</strong>.</p>
 
 <iframe src="assets/perm_2.html" width="900" height="450" frameborder="0"></iframe>
 
-<p>The p_value from the permutation test is 0.216, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of n_steps are different when description is missing and not missing. Thus the missingness dependency between description and n_steps are MCAR.</p>
+<p>The p_value from the permutation test is 0.216, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of <code class="language-plaintext highlighter-rouge">n_steps</code> are different when description is missing and not missing. Thus the missingness dependency between <code class="language-plaintext highlighter-rouge">description</code> and <code class="language-plaintext highlighter-rouge">n_steps</code> are MCAR.</p>
 
-<h2 id="hypothesis-test">Hypothesis Test</h2>
+<h2 id="hypothesis-testing">Hypothesis Testing</h2>
 
-<p>We are interested in whether the amount of calories in a recipe is higher when cheese is included as an ingredient. To test this hypothesis, we use a permutation test.</p>
+<p>Recalling the goal of our project, we will investigate whether the amount of calories in a recipe is larger when there is cheese in the ingredients. The columns we will use are <code class="language-plaintext highlighter-rouge">calories</code> and <code class="language-plaintext highlighter-rouge">cheese</code>. We decided to test our hypothesis using a permutation test.</p>
 
-<p><strong>Null Hypothesis</strong>: the amount of calories in a recipe is not higher when it contains cheese.
-<strong>Alternative Hypothesis</strong>: the amount of calories in a recipe is higher when it contains cheese.
-<strong>Test Statistic</strong>: mean calories with cheese - mean calories without cheese
+<p><strong>Null Hypothesis</strong>: the amount of calories for a recipe with cheese is the same as the amount of calories without cheese.<br />
+<strong>Alternative Hypothesis</strong>: the amount of calories for a recipe with cheese is the greater than the amount of calories without cheese.<br />
+<strong>Test Statistic</strong>: mean calories with cheese - mean calories without cheese.<br />
 <strong>Significance Level</strong>: 0.05</p>
 
-<p>The alternative hypothesis represents our assumption that recipes with cheese have higher calorie content. The null hypothesis is the reverse, stating there is no such relationship between the presence of cheese and the calorie content of a recipe. We use the difference in mean calories (mean calories with cheese - mean calories without cheese) as the test statistic because the mean effectively summarizes the central tendency of the data for each group. A large positive value of this statistic would indicate that recipes with cheese tend to have higher calorie content. We choose a significance level of 0.05 because it is a standard threshold for statistical significance.</p>
+<p>For test statistics, a large value in (mean calories with cheese - mean calories without cheese) will imply that more calories in a recipe  with cheese than recipes without cheese.</p>
 
-<p>In the permutation test, we randomly shuffle the calorie values and assign them to recipes (with or without cheese) for 1,000 iterations. The p-value obtained from this test is 0.0, meaning that none of the randomly generated differences in means is large or equal to the observed difference. This provides strong evidence against the null hypothesis. Therefore, we reject the null hypothesis and conclude that the amount of calories in a recipe is significantly higher when it contains cheese.</p>
+<p>In our permutation test we randomly shuffle calories and assign them to recipes for 1000 times to generate an empirical distribution of the test statistics. We find p value is 0.0, which means none of our randomly generated difference is larger than the observed statistic. Therefore, we have strong evidence to reject the null hypothesis and suggest that recipes with cheese would have higher calories.</p>
+
+<iframe src="assets/hypothesis.html" width="800" height="600" frameborder="0"></iframe>
 
 <h2 id="framing-a-prediction">Framing a Prediction</h2>
 
@@ -570,17 +568,9 @@ The pivot table is aimed to examine the <code class="language-plaintext highligh
 
 <h2 id="baseline-model">Baseline Model</h2>
 
-<p>In our baseline model, we use linear regression to predict the amount of calories, a quantitative value, in recipes. We chose linear regression because it is simple, interpretable, and suitable for predicting continuous target variables like calories. The data is split into training and testing sets with an 80/20 ratio.</p>
+<p>In our baseline model, we want to use linear regression to predict the amount of calories, a quantitative value, in recipes using features total_fat and sugar. All features here (calories, total_fat, sugar) are quantitative, so we don’t need to do any transformation here and can use them directly in the LinearRegression() function. We chose linear regression for the baseline model because all features we are using are continuous. It is hard to predict the amount of calories, a quantitative value, by classification. The data is split into training and testing sets with ratios of 0.8 and 0.2.</p>
 
-<p>The model uses two quantitative features to predict:</p>
-<ol>
-  <li>total_fat</li>
-  <li>sugar</li>
-</ol>
-
-<p>There are no ordinal or nominal features in this model, so no encoding or transformation is required. The features are used directly in the LinearRegression() function.</p>
-
-<p>The RMSE of train set is 203.8 and RMSE of test set is 196.2. The similar performance on the training and testing sets indicates that there is no significant overfitting. However, the RMSE of approximately 200 calories is relatively high, meaning the model’s predictions may not be precise enough for practical use. This is likely because the model uses only two features (total_fat and sugar) without further transformation and does not account for other factors that may influence calorie content. We should be able to improve the model performance by carefully choosing features and try some transformation.</p>
+<p>The RMSE of the train set is 203.8 and the RMSE of the test set is 196.2. The similar performance on the training and testing sets indicates that there is no significant overfitting. However, the RMSE of approximately 200 calories is relatively high, so we may still improve our model. Besides, the model uses only two features (total_fat and sugar) without carefully choosing or further transformation. So we should be able to improve the model performance by carefully choosing features and trying some transformation.</p>
 
 <h2 id="final-model">Final Model</h2>
 
@@ -601,8 +591,8 @@ We didn’t try degree 4 because as none in degree 3 outperforming orginal combi
 
 <h2 id="fairness-analysis">Fairness Analysis</h2>
 
-<p>For fairness analysis, we split the data into two groups: recipes with low sugar (less or equal to 23) and recipes with high sugar (more than 23). We pick 23 as the split point because it is the median of sugar in dataset. Since we uses linear regression model, we decide to rate our test using rooted mean squared error.<br />
-To check the p value, we use permutation testing here. We shuffle whether each recipe has high or low sugar and calculate simulated result based on shuffled category.</p>
+<p>For fairness analysis, we split the data into two groups: recipes with low sugar (less or equal to 23) and recipes with high sugar (more than 23). We pick 23 as the split point because it is the median of sugar in the dataset. Since we use a linear regression model, we decide to rate our test using rooted mean squared error. It is easier to understand compared to $R^2$ and it is better to keep a consistency with prediction part.<br />
+To check the p value, we use permutation testing here. For each recipe we list their actual calories and predicted calories. Then we can calculate squared error for each recipe. By calculating the square root of mean value for each group (low sugar and high sugar), we get two RMSE values and so their difference. We shuffle whether each recipe has high or low sugar and calculate simulated results based on the shuffled category following the same way.</p>
 
 <p><strong>Null hypothesis</strong>: Our model is fair. It predicts calories for recipes with low sugar and high sugar with similar RMSE.<br />
 <strong>Alternative hypothesis</strong>: our model is biased. It predicts calories for recipes with high sugar with higher RMSE than recipes with low sugar.<br />
@@ -610,8 +600,10 @@ To check the p value, we use permutation testing here. We shuffle whether each r
 <strong>Significance level</strong>: 0.05</p>
 
 <iframe src="assets/sugar_fair.html" width="800" height="600" frameborder="0"></iframe>
+<p>As a result, we get a p value of 0.201, which is larger than the significance level. We fail to reject the null hypothesis.</p>
 
-<p>We also want to see if our prediction is fair for cheese. More precisely, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use RMSE as evaluation metric and permutation test to simulate the difference in random state.</p>
+<p>We also want to see if our prediction is fair for cheese. More precisely, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use RMSE as an evaluation metric and permutation test to simulate the difference in random state.<br />
+We run a permutation test in a similar way as we did in fairness analysis for sugar. The only difference is that instead of grouping recipes based on sugar, we group them based on the existence of cheese.</p>
 
 <p><strong>Null hypothesis</strong>: Our model is fair. It predicts calories for recipes with and without cheese with similar RMSE.<br />
 <strong>Alternative hypothesis</strong>: our model is biased. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.<br />
@@ -619,7 +611,7 @@ To check the p value, we use permutation testing here. We shuffle whether each r
 <strong>Significance level</strong>: 0.05</p>
 
 <iframe src="assets/cheese_fair.html" width="800" height="600" frameborder="0"></iframe>
-<p>Since we get a p value of 0.0, we reject null hypothesis. Our model is biased because it predicts calories for recipes with cheese better comparing to recipes without cheese.</p>
+<p>As a result, we get a p value of 0.0, which is lower than the significance level. We reject the null hypothesis and conclude that our model is unfair. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.</p>
 
         </section>
 
