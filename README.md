@@ -216,29 +216,29 @@ Since the p value is less than 0.05 and as small as 0, we have strong evidence t
 
 
 <br>
-Then we want to see if the missingness in description is dependent on number of steps to cook, or `n_steps` in the `recipes` dataframe.
-**Null hypothesis**: the distribution of `n_steps` is the same when `description` is missing and not missing.
-**Alternative hypothesis**: the distribution of `n_steps `is not the same when `description` is missing and not missing.
+Then we want to see if the missingness in rating is dependent on the time spent on cooking, or `minutes` in the `combine` dataframe.
+**Null hypothesis**: the distribution of `minutes` is the same when `rating` is missing and not missing.
+**Alternative hypothesis**: the distribution of `minutes` is not the same when `rating` is missing and not missing.
 
 We visualize the distribution of two distributions to determine type of test to perform. 
 
 <iframe
-  src="assets/steps_descrip.html"
+  src="assets/rating_minutes_no_outliers.html"
   width="900"
   height="500"
   frameborder="0"
 ></iframe>
 
-From the histogram we notice that two distributions have similar shape. Thus we would use **permutation test** with **absolute values in means** as test statistics, or the mean of `n_steps` when `description` is missing and not missing. The significance level is **0.05**. 
+From the histogram we notice that two distributions have similar shape. Thus we would use **permutation test** with **absolute values in means** as test statistics, or the mean of `minutes` when `rating` is missing and not missing. The significance level is **0.05**. 
 
 <iframe
-  src="assets/perm_2.html"
+  src="assets/permu_test_2.html"
   width="900"
   height="450"
   frameborder="0"
 ></iframe>
 
-The p_value from the permutation test is 0.216, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of `n_steps` are different when description is missing and not missing. Thus the missingness dependency between `description` and `n_steps` are MCAR. 
+The p_value from the permutation test is 0.14, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of `minutes` are different when rating is missing and not missing. Thus the missingness of `rating` is not dependent on `minutes`. 
 
 
 
