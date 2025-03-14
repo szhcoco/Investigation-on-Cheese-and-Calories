@@ -250,4 +250,276 @@ offers a massive collecion of recipes categorized by popularity, ingredients, cu
       <li>For <code class="language-plaintext highlighter-rouge">nutrition</code>, each row is a lise-list srings storing values in the form <code class="language-plaintext highlighter-rouge">[calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]</code>. Since all values are important for later investigation, we want to get access to them easier, so we:
         <ul>
           <li>remove the first and last character of the original nutrition and split the rest by ‘,’.</li>
-          <li>use <code class="language-plaintext highl
+          <li>use <code class="language-plaintext highlighter-rouge">apply</code> to get the value for each component and convert them to <code class="language-plaintext highlighter-rouge">float</code>.</li>
+          <li>add new columns: <code class="language-plaintext highlighter-rouge">calories</code>, <code class="language-plaintext highlighter-rouge">total_fat</code>, <code class="language-plaintext highlighter-rouge">sugar</code>, <code class="language-plaintext highlighter-rouge">sodium</code>, <code class="language-plaintext highlighter-rouge">protein</code>, <code class="language-plaintext highlighter-rouge">saturated_fat</code>, <code class="language-plaintext highlighter-rouge">carbohydrates</code> into <code class="language-plaintext highlighter-rouge">RAW_recipes</code>.</li>
+          <li>name a new dataframe after transforming the <code class="language-plaintext highlighter-rouge">RAW_recipes</code> called <code class="language-plaintext highlighter-rouge">recipes</code>.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Create <code class="language-plaintext highlighter-rouge">cheese</code> column to <code class="language-plaintext highlighter-rouge">recipes</code>
+    <ul>
+      <li>For <code class="language-plaintext highlighter-rouge">ingredients</code>, we only care about whether cheese is presense in the long string in order to invest the relationship between calories and cheese:
+        <ul>
+          <li>use regular expression to find term <code class="language-plaintext highlighter-rouge">cheese</code> in <code class="language-plaintext highlighter-rouge">ingredients</code>, and create a new column <code class="language-plaintext highlighter-rouge">cheese</code> with <code class="language-plaintext highlighter-rouge">boolean</code> values indicating if there is cheese in ingredients.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Merge dataframes into a dataset called <code class="language-plaintext highlighter-rouge">combine</code>
+    <ul>
+      <li>We left merge <code class="language-plaintext highlighter-rouge">RAW_interactions</code> to <code class="language-plaintext highlighter-rouge">recipes</code> on <code class="language-plaintext highlighter-rouge">id</code> in <code class="language-plaintext highlighter-rouge">recipes</code> and <code class="language-plaintext highlighter-rouge">recipe_id</code> in <code class="language-plaintext highlighter-rouge">RAW_interactions</code>.</li>
+    </ul>
+  </li>
+  <li>Replace all ratings of 0.0 to <code class="language-plaintext highlighter-rouge">nan</code> in <code class="language-plaintext highlighter-rouge">RAW_interactions</code>
+    <ul>
+      <li>Valid ratings only include 1, 2, 3, 4, 5, and ratings of 0.0 indicates that no rating is given in the interaction, which contains no actual meaning.</li>
+    </ul>
+  </li>
+  <li>Compute average rating
+    <ul>
+      <li>We calculate the average rating for each recipe as new column <code class="language-plaintext highlighter-rouge">avg_rating</code>, so it can better demonstrate the overall ratings of the recipe.</li>
+      <li>Merge the <code class="language-plaintext highlighter-rouge">avg_rating</code> to the <code class="language-plaintext highlighter-rouge">combine</code>.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>After cleaning, there are 234429 rows and 29 columns in <code class="language-plaintext highlighter-rouge">combine</code>. Here we display the first five rows of the dataframe with 10 columns that will be mainly used for further investigation.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">name</th>
+      <th style="text-align: center">calories</th>
+      <th style="text-align: center">total_fat</th>
+      <th style="text-align: center">sugar</th>
+      <th style="text-align: center">sodium</th>
+      <th style="text-align: center">protein</th>
+      <th style="text-align: center">saturated_fat</th>
+      <th style="text-align: center">carbohydrates</th>
+      <th style="text-align: center">cheese</th>
+      <th style="text-align: center">rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">1 brownies in the world    best ever</td>
+      <td style="text-align: center">138.4</td>
+      <td style="text-align: center">10</td>
+      <td style="text-align: center">50</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">19</td>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">False</td>
+      <td style="text-align: center">4</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1 in canada chocolate chip cookies</td>
+      <td style="text-align: center">595.1</td>
+      <td style="text-align: center">46</td>
+      <td style="text-align: center">211</td>
+      <td style="text-align: center">22</td>
+      <td style="text-align: center">13</td>
+      <td style="text-align: center">51</td>
+      <td style="text-align: center">26</td>
+      <td style="text-align: center">False</td>
+      <td style="text-align: center">5</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">412 broccoli casserole</td>
+      <td style="text-align: center">194.8</td>
+      <td style="text-align: center">20</td>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">32</td>
+      <td style="text-align: center">22</td>
+      <td style="text-align: center">36</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">True</td>
+      <td style="text-align: center">5</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">412 broccoli casserole</td>
+      <td style="text-align: center">194.8</td>
+      <td style="text-align: center">20</td>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">32</td>
+      <td style="text-align: center">22</td>
+      <td style="text-align: center">36</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">True</td>
+      <td style="text-align: center">5</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">412 broccoli casserole</td>
+      <td style="text-align: center">194.8</td>
+      <td style="text-align: center">20</td>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">32</td>
+      <td style="text-align: center">22</td>
+      <td style="text-align: center">36</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">True</td>
+      <td style="text-align: center">5</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="univariate-analysis">Univariate Analysis</h3>
+<p>First, we will examine the distribution of  calories from the <code class="language-plaintext highlighter-rouge">recipes</code> dataframe.</p>
+
+<iframe src="assets/hist_calories_total.html" width="800" height="600" frameborder="0"></iframe>
+
+<p>But as one can see from the plot, the distribution mostly concentrates on the very left. The outliers at the right tail makes the distribution hard to be examined.</p>
+
+<p>Then we remove the outliers to focus on values less and equal to 990.</p>
+
+<iframe src="assets/hist_calories.html" width="800" height="600" frameborder="0"></iframe>
+
+<p>By removing the outliers in the histogram, we can more clearly observe that the distribution is skewed to the left, with the majority of data concentrated between 50 and 400 calories, and a peak at around 180. This is quite surprising, as the distribution suggests that more recipes promoting a healthy diet have been published. After the peak there is a decrease of the count of recipes, corresponding with higher calories.</p>
+
+<h3 id="bivariate-analysis">Bivariate Analysis</h3>
+<p>For bivariate analysis, we will examine the distribution of calories with and without cheese, also with outliers removed to better visualization.</p>
+
+<iframe src="assets/fig_with_without_cheese.html" width="800" height="600" frameborder="0"></iframe>
+
+<p>We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories.</p>
+
+<p>[more analysis here??]</p>
+
+<h3 id="grouping-and-aggregates">Grouping and Aggregates</h3>
+<p>An interesting aggregate that we find is shown in the pivot table below.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Year</th>
+      <th style="text-align: right">(‘diff_prop’, 0.0)</th>
+      <th style="text-align: right">(‘diff_prop’, 1.0)</th>
+      <th style="text-align: right">(‘diff_prop’, 2.0)</th>
+      <th style="text-align: right">(‘diff_prop’, 3.0)</th>
+      <th style="text-align: right">(‘diff_prop’, 4.0)</th>
+      <th style="text-align: right">(‘diff_prop’, 5.0)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">2008</td>
+      <td style="text-align: right">-0.00417087</td>
+      <td style="text-align: right">0.0373018</td>
+      <td style="text-align: right">0.0314886</td>
+      <td style="text-align: right">0.0339742</td>
+      <td style="text-align: right">0.0296494</td>
+      <td style="text-align: right">0.00595056</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2009</td>
+      <td style="text-align: right">-0.00117979</td>
+      <td style="text-align: right">0.0121839</td>
+      <td style="text-align: right">-0.00573415</td>
+      <td style="text-align: right">0.0251196</td>
+      <td style="text-align: right">0.00886583</td>
+      <td style="text-align: right">0.0102082</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2010</td>
+      <td style="text-align: right">-0.00931341</td>
+      <td style="text-align: right">0.00106069</td>
+      <td style="text-align: right">0.0427559</td>
+      <td style="text-align: right">-0.00798016</td>
+      <td style="text-align: right">-0.00647318</td>
+      <td style="text-align: right">-0.00948729</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2011</td>
+      <td style="text-align: right">0.00977973</td>
+      <td style="text-align: right">-0.00940128</td>
+      <td style="text-align: right">0.00721202</td>
+      <td style="text-align: right">0.0137947</td>
+      <td style="text-align: right">-0.00071431</td>
+      <td style="text-align: right">-0.00714992</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2012</td>
+      <td style="text-align: right">0.023112</td>
+      <td style="text-align: right">-0.00471617</td>
+      <td style="text-align: right">0.016432</td>
+      <td style="text-align: right">-0.00377306</td>
+      <td style="text-align: right">-0.00190885</td>
+      <td style="text-align: right">0.0127113</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2013</td>
+      <td style="text-align: right">0.022195</td>
+      <td style="text-align: right">0.00508453</td>
+      <td style="text-align: right">0.000573415</td>
+      <td style="text-align: right">-0.014781</td>
+      <td style="text-align: right">-0.00979702</td>
+      <td style="text-align: right">0.00557635</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2014</td>
+      <td style="text-align: right">0.00269153</td>
+      <td style="text-align: right">0.0326774</td>
+      <td style="text-align: right">0.00872339</td>
+      <td style="text-align: right">-0.0103835</td>
+      <td style="text-align: right">-0.00499667</td>
+      <td style="text-align: right">0.00335626</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2015</td>
+      <td style="text-align: right">-0.0104338</td>
+      <td style="text-align: right">-0.0132254</td>
+      <td style="text-align: right">-0.0242568</td>
+      <td style="text-align: right">-0.0121251</td>
+      <td style="text-align: right">-0.00482612</td>
+      <td style="text-align: right">-0.00185076</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2016</td>
+      <td style="text-align: right">-0.0105039</td>
+      <td style="text-align: right">-0.0162877</td>
+      <td style="text-align: right">-0.0174133</td>
+      <td style="text-align: right">-0.00873181</td>
+      <td style="text-align: right">-0.00184123</td>
+      <td style="text-align: right">-0.00384644</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2017</td>
+      <td style="text-align: right">-0.0131052</td>
+      <td style="text-align: right">-0.0247924</td>
+      <td style="text-align: right">-0.0407065</td>
+      <td style="text-align: right">-0.00617981</td>
+      <td style="text-align: right">-0.00443334</td>
+      <td style="text-align: right">-0.00802292</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2018</td>
+      <td style="text-align: right">-0.00907127</td>
+      <td style="text-align: right">-0.0198854</td>
+      <td style="text-align: right">-0.0190744</td>
+      <td style="text-align: right">-0.00893407</td>
+      <td style="text-align: right">-0.00352448</td>
+      <td style="text-align: right">-0.0074453</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The pivot table is aimed to examine the <code class="language-plaintext highlighter-rouge">diff_prop</code> which is calculated by <code class="language-plaintext highlighter-rouge">prop_cheese_recipes - prop_nocheese_recipes</code> across years from 2008 to 2018, given the level of rating. Positive values indicate there are more recipes with cheese, and on the other hand negative values indicate more recipes without cheese.</p>
+
+        </section>
+
+        <aside id="sidebar">
+          
+
+          
+            <p class="repo-owner"><a href="https://github.com/szhcoco/Investigation-on-Cheese-and-Calories">Investigation-on-Cheese-and-Calories</a> is maintained by <a href="https://github.com/szhcoco">szhcoco</a>.</p>
+          
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>
