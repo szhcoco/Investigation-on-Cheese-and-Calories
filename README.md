@@ -258,6 +258,13 @@ We are interested in whether the amount of calories in a recipe is larger when t
 Since we are interested in whether the amount of calories in a recipe is larger when there is cheese in the ingredients, our null hypothesis should be there is no such relationship between them: the amount of calories for a recipe is not larger when it has cheese. Alternative hypotheses should be the same as our assumption. Since mean value illustrates the overall tendency of data for each group, by calculating the difference between them we can have an idea of how different the two groups are in terms of calories. More precisely, if mean calories with cheese - mean calories without cheese is a large value, it means that the amount of calories in a recipe is larger with cheese compared to recipes without cheese. We choose 0.05 as our significance level as it is a regular choice.\
 In our permutation test we randomly shuffle calories and assign them to recipes for 1000 times. We find p value is 0.0, which means none of our randomly generated difference is larger than the observed statistic. Therefore, We can reject the null hypothesis and conclude that the amount of calories for a recipe is larger when it has cheese.
 
+<iframe
+  src="assets/hypothesis.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
 ## Framing a Prediction
 
 We plan to predict the amount of calories for each recipe using a linear regression model. Since the amount of calories can be any positive value, linear regression is a suitable choice for this continuous target variable.
@@ -267,13 +274,6 @@ The target variable for our model is the amount of calories in each recipe. We c
 We evaluated our model using Root Mean Squared Error (RMSE). RMSE measures the average magnitude of the prediction errors in the same units as the target variable (calories), making it easy to interpret. We chose RMSE over $R^2$ because RMSE provides a direct measure of prediction error, while $R^2$ only explains the proportion of variance in the target variable. Additionally, we chose RMSE over Mean Absolute Error (MAE) because RMSE penalizes large errors more heavily, which aligns with our goal of avoiding significant inaccuracies in calorie predictions.
 
 Since the nutritions are calculated separately, it is reasonable to use other nutrition and ingredients to predict the amount of calories.
-
-<iframe
-  src="assets/hypothesis.html"
-  width="800"
-  height="600"
-  frameborder="0"
-></iframe>
 
 ## Baseline Model
 
