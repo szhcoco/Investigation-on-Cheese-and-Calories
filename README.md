@@ -246,18 +246,17 @@ The p_value from the permutation test is 0.216, which is greater than the thresh
 
 
 
-## Hypothesis Test
+## Hypothesis Testing
 
-We are interested in whether the amount of calories in a recipe is higher when cheese is included as an ingredient. To test this hypothesis, we use a permutation test.
+We are interested in whether the amount of calories in a recipe is larger when there is cheese in the ingredients. We decided to test our hypothesis using a permutation test.
 
-**Null Hypothesis**: the amount of calories in a recipe is not higher when it contains cheese.
-**Alternative Hypothesis**: the amount of calories in a recipe is higher when it contains cheese.
+**Null Hypothesis**: the amount of calories for a recipe is not larger when it has cheese.
+**Alternative Hypothesis**: the amount of calories for a recipe is larger when it has cheese.
 **Test Statistic**: mean calories with cheese - mean calories without cheese
 **Significance Level**: 0.05
 
-The alternative hypothesis represents our assumption that recipes with cheese have higher calorie content. The null hypothesis is the reverse, stating there is no such relationship between the presence of cheese and the calorie content of a recipe. We use the difference in mean calories (mean calories with cheese - mean calories without cheese) as the test statistic because the mean effectively summarizes the central tendency of the data for each group. A large positive value of this statistic would indicate that recipes with cheese tend to have higher calorie content. We choose a significance level of 0.05 because it is a standard threshold for statistical significance.
-
-In the permutation test, we randomly shuffle the calorie values and assign them to recipes (with or without cheese) for 1,000 iterations. The p-value obtained from this test is 0.0, meaning that none of the randomly generated differences in means is large or equal to the observed difference. This provides strong evidence against the null hypothesis. Therefore, we reject the null hypothesis and conclude that the amount of calories in a recipe is significantly higher when it contains cheese.
+Since we are interested in whether the amount of calories in a recipe is larger when there is cheese in the ingredients, our null hypothesis should be there is no such relationship between them: the amount of calories for a recipe is not larger when it has cheese. Alternative hypotheses should be the same as our assumption. Since mean value illustrates the overall tendency of data for each group, by calculating the difference between them we can have an idea of how different the two groups are in terms of calories. More precisely, if mean calories with cheese - mean calories without cheese is a large value, it means that the amount of calories in a recipe is larger with cheese compared to recipes without cheese. We choose 0.05 as our significance level as it is a regular choice.\
+In our permutation test we randomly shuffle calories and assign them to recipes for 1000 times. We find p value is 0.0, which means none of our randomly generated difference is larger than the observed statistic. Therefore, We can reject the null hypothesis and conclude that the amount of calories for a recipe is larger when it has cheese.
 
 ## Framing a Prediction
 
@@ -269,17 +268,18 @@ We evaluated our model using Root Mean Squared Error (RMSE). RMSE measures the a
 
 Since the nutritions are calculated separately, it is reasonable to use other nutrition and ingredients to predict the amount of calories.
 
+<iframe
+  src="assets/hypothesis.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
 ## Baseline Model
 
-In our baseline model, we use linear regression to predict the amount of calories, a quantitative value, in recipes. We chose linear regression because it is simple, interpretable, and suitable for predicting continuous target variables like calories. The data is split into training and testing sets with an 80/20 ratio.
+In our baseline model, we want to use linear regression to predict the amount of calories, a quantitative value, in recipes using features total_fat and sugar. All features here (calories, total_fat, sugar) are quantitative, so we don’t need to do any transformation here and can use them directly in the LinearRegression() function. We chose linear regression for the baseline model because all features we are using are continuous. It is hard to predict the amount of calories, a quantitative value, by classification. The data is split into training and testing sets with ratios of 0.8 and 0.2.
 
-The model uses two quantitative features to predict:
-1. total_fat
-2. sugar
-
-There are no ordinal or nominal features in this model, so no encoding or transformation is required. The features are used directly in the LinearRegression() function.
-
-The RMSE of train set is 203.8 and RMSE of test set is 196.2. The similar performance on the training and testing sets indicates that there is no significant overfitting. However, the RMSE of approximately 200 calories is relatively high, meaning the model's predictions may not be precise enough for practical use. This is likely because the model uses only two features (total_fat and sugar) without further transformation and does not account for other factors that may influence calorie content. We should be able to improve the model performance by carefully choosing features and try some transformation.
+The RMSE of the train set is 203.8 and the RMSE of the test set is 196.2. The similar performance on the training and testing sets indicates that there is no significant overfitting. However, the RMSE of approximately 200 calories is relatively high, so we may still improve our model. Besides, the model uses only two features (total_fat and sugar) without carefully choosing or further transformation. So we should be able to improve the model performance by carefully choosing features and trying some transformation.
 
 ## Final Model
 
@@ -300,8 +300,9 @@ The final model performs better than baseline model. It achieves RMSE of 48.40 f
 
 ## Fairness Analysis
 
-For fairness analysis, we split the data into two groups: recipes with low sugar (less or equal to 23) and recipes with high sugar (more than 23). We pick 23 as the split point because it is the median of sugar in dataset. Since we uses linear regression model, we decide to rate our test using rooted mean squared error.\
-To check the p value, we use permutation testing here. We shuffle whether each recipe has high or low sugar and calculate simulated result based on shuffled category.
+For fairness analysis, we split the data into two groups: recipes with low sugar (less or equal to 23) and recipes with high sugar (more than 23). We pick 23 as the split point because it is the median of sugar in the dataset. Since we use a linear regression model, we decide to rate our test using rooted mean squared error. It is easier to understand compared to $R^2$ and it is better to keep a consistency with prediction part.\
+To check the p value, we use permutation testing here. For each recipe we list their actual calories and predicted calories. Then we can calculate squared error for each recipe. By calculating the square root of mean value for each group (low sugar and high sugar), we get two RMSE values and so their difference. We shuffle whether each recipe has high or low sugar and calculate simulated results based on the shuffled category following the same way.
+
 
 **Null hypothesis**: Our model is fair. It predicts calories for recipes with low sugar and high sugar with similar RMSE.\
 **Alternative hypothesis**: our model is biased. It predicts calories for recipes with high sugar with higher RMSE than recipes with low sugar.\
@@ -314,8 +315,12 @@ To check the p value, we use permutation testing here. We shuffle whether each r
   height="600"
   frameborder="0"
 ></iframe>
+As a result, we get a p value of 0.201, which is larger than the significance level. We fail to reject the null hypothesis.
 
-We also want to see if our prediction is fair for cheese. More precisely, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use RMSE as evaluation metric and permutation test to simulate the difference in random state.
+
+We also want to see if our prediction is fair for cheese. More precisely, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use RMSE as an evaluation metric and permutation test to simulate the difference in random state.\
+We run a permutation test in a similar way as we did in fairness analysis for sugar. The only difference is that instead of grouping recipes based on sugar, we group them based on the existence of cheese.
+
 
 **Null hypothesis**: Our model is fair. It predicts calories for recipes with and without cheese with similar RMSE.\
 **Alternative hypothesis**: our model is biased. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.\
@@ -328,4 +333,4 @@ We also want to see if our prediction is fair for cheese. More precisely, if our
   height="600"
   frameborder="0"
 ></iframe>
-Since we get a p value of 0.0, we reject null hypothesis. Our model is biased because it predicts calories for recipes with cheese better comparing to recipes without cheese.
+As a result, we get a p value of 0.0, which is lower than the significance level. We reject the null hypothesis and conclude that our model is unfair. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.
