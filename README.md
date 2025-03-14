@@ -292,5 +292,4 @@ We also want to see if our prediction is fair for cheese. More precisely, if our
   height="600"
   frameborder="0"
 ></iframe>
-
 Since we get a p value of 0.0, we reject null hypothesis. Our model is biased because it predicts calories for recipes with cheese better comparing to recipes without cheese.
