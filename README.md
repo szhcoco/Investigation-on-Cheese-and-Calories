@@ -250,9 +250,9 @@ The p_value from the permutation test is 0.216, which is greater than the thresh
 
 We are interested in whether the amount of calories in a recipe is larger when there is cheese in the ingredients. We decided to test our hypothesis using a permutation test.
 
-**Null Hypothesis**: the amount of calories for a recipe is not larger when it has cheese.
-**Alternative Hypothesis**: the amount of calories for a recipe is larger when it has cheese.
-**Test Statistic**: mean calories with cheese - mean calories without cheese
+**Null Hypothesis**: the amount of calories for a recipe is not larger when it has cheese.\
+**Alternative Hypothesis**: the amount of calories for a recipe is larger when it has cheese.\
+**Test Statistic**: mean calories with cheese - mean calories without cheese.\
 **Significance Level**: 0.05
 
 Since we are interested in whether the amount of calories in a recipe is larger when there is cheese in the ingredients, our null hypothesis should be there is no such relationship between them: the amount of calories for a recipe is not larger when it has cheese. Alternative hypotheses should be the same as our assumption. Since mean value illustrates the overall tendency of data for each group, by calculating the difference between them we can have an idea of how different the two groups are in terms of calories. More precisely, if mean calories with cheese - mean calories without cheese is a large value, it means that the amount of calories in a recipe is larger with cheese compared to recipes without cheese. We choose 0.05 as our significance level as it is a regular choice.\
