@@ -4,7 +4,7 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/assets/css/style.css?v=724644227e71a760b86d85924ee88c070a30d98b" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=61e42e129666b1b95e2431b8e9c4dc4023278547" media="screen" type="text/css">
     <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
 
     <!--[if lt IE 9]>
@@ -64,19 +64,28 @@
 <p><strong>Website Link</strong>: <a href="https://szhcoco.github.io/Investigation-on-Cheese-and-Calories/">website</a></p>
 
 <h2 id="overview">Overview</h2>
-<p>This is a data science project, conducted by UCSD, aiming to investigate on the relationship between the existence of cheese in ingredients and calories</p>
+<p>This is a data science project conducted at UCSD, aiming to investigate on the relationship between the presence of cheese in ingredients and the value of calories. We will walk through the process of data cleaning, checking for missingness dependency, hypothesis testing, building and improving regression models for predictions, as well as performing fairness analysis, to explore the level of significance of cheese and other ingredients that contribute to calories.</p>
 
-<h2 id="instruction">Instruction</h2>
-<p>Cheese is a pupolar ingredient for food. But it also raise concerns about healthy problem because people tend to take cheese as having high calories. Does recipes with cheese really have high calories comparing to recipes without cheese? To answer the question, we investigate on recipes.</p>
+<h2 id="introduction">Introduction</h2>
+<p>As a dairy made from milk, cheese is rich in nutritions that are essential in maintaining and improving health. The major nutritions include calcium for the growth of bones and teeth, protein that support the development and repair of bone tissues, and vitamins like A and B12 as sources of healthy fat. The nutritions cheese contains determine its importance for people of all ages, and esepcially for children who are in the phase of developing bones and muscles.</p>
 
-<p>To explore this question, we analyze two datasets from a <a href="https://www.food.com/">recipe recommendation website</a>, containing recipes and their ratings since 2008:</p>
+<p>In addition to its functionality contributing to health, cheese in food tickles our taste buds and can be added into salads, noodles (Mac &amp; Cheese!), rice, any proteins, pizza, soup… literally anything to make the meal delicious!</p>
+
+<p>The datasets from a <a href="https://www.food.com/">recipe recommendation website</a>, containing recipes and their ratings since 2008. The Food website
+offers a massive collecion of recipes categorized by popularity, ingredients, cuisines, and meal type. It serves as a platform where recipes are published with photos where people could comment, reply, and post photos to show their work after trying them. It also contains information about ingredients thus we are able to identify recipes containing cheese.</p>
+
+<p>Despite its popularity and importance as an ingredient for food, concerns have been raised about the health issues related to cheese. In addition to its nutritions, cheese are considered as a high-calory ingredient, and over consumption of high-calory food may lead to increase in weight and obesity, diabetes, or heart disease that would risk life.</p>
+
+<p>Our goal in this project is to answer the question of <strong>whether food with cheese tends to have high calories</strong>, as well as to identify ingredients that play an important role in determining the calories of a recipe. By examining the relationship between ingredients and calories, we will provide insights for people to enjoy their meals while eating healthily. Based on the diversity and the large volumn of recipes that the website provides, we consider it as a representative dataset for further analysis.</p>
+
+<h4 id="introduction-to-the-columns">Introduction to the Columns</h4>
 <ul>
-  <li>Recipe dataset: 83,782 rows and 12 columns, containing information about each recipe</li>
+  <li>Recipe dataset: 83,782 rows and 12 columns, containing information about each recipe.</li>
 </ul>
 
 <table border="1">
     <thead>
-    <tr style="text-align: right;">
+    <tr style="text-align: middle;">
       <th>Column</th>
       <th>Description</th>
     </tr>
@@ -124,6 +133,7 @@
     </tr>
   </tbody>
  </table>
+
 <ul>
   <li>Ratings dataset: 731,927 rows and 5 columns, recording users’ ratings for different recipes.</li>
 </ul>
@@ -165,9 +175,11 @@
 
 <h2 id="data-cleaning-and-exploratory-data-analysis">Data Cleaning and Exploratory Data Analysis</h2>
 <ol>
-  <li>Download the datasets.</li>
-  <li>Remove column ‘Unnamed: 0’ from recipes<br />
-Column doesn’t contain any useful information, so we drop the column.</li>
+  <li>Clean the <code class="language-plaintext highlighter-rouge">RAW_recipes</code> dataframe before merge:
+    <ul>
+      <li>Remove column ‘Unnamed: 0’ from recipes since it does not contain any useful information.</li>
+    </ul>
+  </li>
   <li>Split column ‘nutrition’ in recipes into columns ‘calories’, ‘total_fat’, ‘sugar’, ‘sodium’, ‘protein’, ‘saturated_fat’, ‘carbohydrates’.<br />
 Since column ‘nutrition’ in recipes contains list-like strings storing [calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)], we split the column and store informations as floats in separate columns for each kind of nutrition so we can access them easier in the future.<br />
 To do so, we remove the first and last character of the original nutrition and split the rest by ‘,’. Then we use apply to get the value for each component and convert them to float at last.</li>

@@ -5,17 +5,28 @@
 **Website Link**: [website](https://szhcoco.github.io/Investigation-on-Cheese-and-Calories/)
 
 ## Overview
-This is a data science project, conducted by UCSD, aiming to investigate on the relationship between the existence of cheese in ingredients and calories
+This is a data science project conducted at UCSD, aiming to investigate on the relationship between the presence of cheese in ingredients and the value of calories. We will walk through the process of data cleaning, checking for missingness dependency, hypothesis testing, building and improving regression models for predictions, as well as performing fairness analysis, to explore the level of significance of cheese and other ingredients that contribute to calories.  
 
-## Instruction
-Cheese is a pupolar ingredient for food. But it also raise concerns about healthy problem because people tend to take cheese as having high calories. Does recipes with cheese really have high calories comparing to recipes without cheese? To answer the question, we investigate on recipes.
 
-To explore this question, we analyze two datasets from a [recipe recommendation website](https://www.food.com/), containing recipes and their ratings since 2008:
- - Recipe dataset: 83,782 rows and 12 columns, containing information about each recipe
+## Introduction
+ As a dairy made from milk, cheese is rich in nutritions that are essential in maintaining and improving health. The major nutritions include calcium for the growth of bones and teeth, protein that support the development and repair of bone tissues, and vitamins like A and B12 as sources of healthy fat. The nutritions cheese contains determine its importance for people of all ages, and esepcially for children who are in the phase of developing bones and muscles.
+
+In addition to its functionality contributing to health, cheese in food tickles our taste buds and can be added into salads, noodles (Mac & Cheese!), rice, any proteins, pizza, soup... literally anything to make the meal delicious!
+
+The datasets from a [recipe recommendation website](https://www.food.com/), containing recipes and their ratings since 2008. The Food website
+offers a massive collecion of recipes categorized by popularity, ingredients, cuisines, and meal type. It serves as a platform where recipes are published with photos where people could comment, reply, and post photos to show their work after trying them. It also contains information about ingredients thus we are able to identify recipes containing cheese. 
+
+Despite its popularity and importance as an ingredient for food, concerns have been raised about the health issues related to cheese. In addition to its nutritions, cheese are considered as a high-calory ingredient, and over consumption of high-calory food may lead to increase in weight and obesity, diabetes, or heart disease that would risk life. 
+
+Our goal in this project is to answer the question of **whether food with cheese tends to have high calories**, as well as to identify ingredients that play an important role in determining the calories of a recipe. By examining the relationship between ingredients and calories, we will provide insights for people to enjoy their meals while eating healthily. Based on the diversity and the large volumn of recipes that the website provides, we consider it as a representative dataset for further analysis. 
+
+
+#### Introduction to the Columns
+ - Recipe dataset: 83,782 rows and 12 columns, containing information about each recipe. 
 
  <table border="1">
     <thead>
-    <tr style="text-align: right;">
+    <tr style="text-align: middle;">
       <th>Column</th>
       <th>Description</th>
     </tr>
@@ -63,6 +74,7 @@ To explore this question, we analyze two datasets from a [recipe recommendation 
     </tr>
   </tbody>
  </table>
+
  - Ratings dataset: 731,927 rows and 5 columns, recording users' ratings for different recipes.
 
  <table border="1">
@@ -101,9 +113,8 @@ To address the problem, we need to focus on column 'nutrition' and 'ingredient'.
 This insight could help home cooks find more appealing recipes, assist recipe creators in tailoring their content, and guide food platforms in improving recommendations.
 
 ## Data Cleaning and Exploratory Data Analysis
-1. Download the datasets.
-2. Remove column 'Unnamed: 0' from recipes\
-Column doesn't contain any useful information, so we drop the column.
+1. Clean the `RAW_recipes` dataframe before merge:
+- Remove column 'Unnamed: 0' from recipes since it does not contain any useful information.
 3. Split column 'nutrition' in recipes into columns 'calories', 'total_fat', 'sugar', 'sodium', 'protein', 'saturated_fat', 'carbohydrates'.\
 Since column 'nutrition' in recipes contains list-like strings storing [calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)], we split the column and store informations as floats in separate columns for each kind of nutrition so we can access them easier in the future.\
 To do so, we remove the first and last character of the original nutrition and split the rest by ','. Then we use apply to get the value for each component and convert them to float at last.
