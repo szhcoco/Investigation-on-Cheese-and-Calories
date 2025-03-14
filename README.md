@@ -24,89 +24,29 @@ Our goal in this project is to answer the question of **whether food with cheese
 #### Introduction to the Columns
  - `RAW_recipes` dataset: 83,782 rows and 12 columns, containing information about each recipe. 
 
- <table border="1">
-    <thead>
-    <tr style="text-align: middle;">
-      <th>Column</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>'name'</td>
-      <td>Recipe name</td>
-    </tr>
-    <tr>
-      <td>'id'</td>
-      <td>Recipe ID</td>
-    </tr>
-    <tr>
-      <td>'minutes'</td>
-      <td>Minutes to prepare recipe</td>
-    </tr>
-    <tr>
-      <td>'contributor_id'</td>
-      <td>User ID who submitted this recipe</td>
-    </tr>
-    <tr>
-      <td>'submitted'</td>
-      <td>Date recipe was submitted</td>
-    </tr>
-    <tr>
-        <td>'tags'</td>
-        <td>Food.com tags for recipe</td>
-    </tr>
-    <tr>
-      <td>'nutrition'</td>
-      <td>Nutrition information in the form [calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]; PDV stands for “percentage of daily value”</td>
-    </tr>
-    <tr>
-      <td>'n_steps'</td>
-      <td>DNumber of steps in recipe</td>
-    </tr>
-    <tr>
-      <td>'steps'</td>
-      <td>Text for recipe steps, in order</td>
-    </tr>
-    <tr>
-      <td>''description'</td>
-      <td>User-provided description</td>
-    </tr>
-  </tbody>
- </table>
+ | Column           | Description                                                                                                                                                                                       |
+|:-----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 'name'           | Recipe name                                                                                                                                                                                       |
+| 'id'             | Recipe ID                                                                                                                                                                                         |
+| 'minutes'        | Minutes to prepare recipe                                                                                                                                                                         |
+| 'contributor_id' | User ID who submitted this recipe                                                                                                                                                                 |
+| 'submitted'      | Date recipe was submitted                                                                                                                                                                         |
+| 'tags'           | Food.com tags for recipe                                                                                                                                                                          |
+| 'nutrition'      | Nutrition information in the form [calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]; PDV stands for “percentage of daily value” |
+| 'n_steps'        | Number of steps in recipe                                                                                                                                                                         |
+| 'steps'          | Text for recipe steps, in order                                                                                                                                                                   |
+| 'description'    | User-provided description                                                                                                                                                                         |
 
  - `RAW_interactions` dataset: 731,927 rows and 5 columns, recording users' ratings and comments for different recipes.
 
- <table border="1">
-    <thead>
-    <tr style="text-align: right;">
-      <th>Column</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>'user_id'</td>
-      <td>User ID</td>
-    </tr>
-    <tr>
-      <td>'recipe_id'</td>
-      <td>Recipe ID</td>
-    </tr>
-    <tr>
-      <td>'date'</td>
-      <td>Date of interaction</td>
-    </tr>
-    <tr>
-      <td>'rating'</td>
-      <td>Rating given</td>
-    </tr>
-    <tr>
-      <td>'review'</td>
-      <td>Review text</td>
-    </tr>
-  </tbody>
- </table>
+| Column      | Description         |
+|:------------|:--------------------|
+| 'user_id'   | User ID             |
+| 'recipe_id' | Recipe ID           |
+| 'date'      | Date of interaction |
+| 'rating'    | Rating given        |
+| 'review'    | Review text         |
+
 
 To address our problem, we need to focus on column `nutrition` and `ingredient`, from which we will extract new values into columns added to the dataframe later in the cleaning process. 
 
