@@ -173,9 +173,8 @@ We could obtain additional data to to make the missingness MAR. One possible app
 
 ### Missingness Dependency
 
-In this part, we will examine the missingness dependency between columns, using permutation tests. 
+In this part, we will examine the missingness dependency between `rating` and the other two columns, using permutation tests. 
 
-#### MAR
 The first two columns that we want to focus on are `calories` and `rating`, and we want to determine whether the missingness in `rating` is dependent on distribution of `calories`. 
 
 **Null Hypothesis**: the distribution of  `calories` is the same when `rating` is missing and not missing.
@@ -217,10 +216,11 @@ Since the p value is less than 0.05 and as small as 0, we have strong evidence t
 
 <br>
 Then we want to see if the missingness in rating is dependent on the time spent on cooking, or `minutes` in the `combine` dataframe.
-**Null hypothesis**: the distribution of `minutes` is the same when `rating` is missing and not missing.
+
+**Null hypothesis**: the distribution of `minutes` is the same when `rating` is missing and not missing.  
 **Alternative hypothesis**: the distribution of `minutes` is not the same when `rating` is missing and not missing.
 
-We visualize the distribution of two distributions to determine type of test to perform. 
+We visualize the two distributions to determine type of test to perform. We also exclude outliers in `minutes` to make it clearer to see.  
 
 <iframe
   src="assets/rating_minutes_no_outliers.html"
@@ -259,7 +259,7 @@ In our permutation test we randomly shuffle calories and assign them to recipes 
 <iframe
   src="assets/hypothesis.html"
   width="800"
-  height="600"
+  height="450"
   frameborder="0"
 ></iframe>
 
@@ -267,7 +267,7 @@ In our permutation test we randomly shuffle calories and assign them to recipes 
 
 We plan to predict the amount of calories for each recipe using a linear regression model as `calories` are continous variable. It is hard to predict the amount of calories as a quantitative value by classification.
 
-The reason we choose to use `calories `as our prediction target is that it is an important factor in deciding whether to use a recipe for a meal. Recipes with too many calories may raise health concerns, while recipes with too few calories may not be able to maintain our daily activities. From our earlier investigation, we  found that the presence of cheese in a recipe correlates with calory values. As an ingredient rich in nutrients like calcium, protein, and fat, we wonder what the key nutrients, or other factors, play a significant role in determining calories. Thus, we want to predict calorie amounts based on the presence of cheese and other nutritional features.
+The reason we choose to use `calories `as our prediction target is that it is an important factor in deciding whether to use a recipe for a meal. Recipes with too many calories may raise health concerns, while recipes with too few calories may not be able to maintain our daily activities. From our earlier investigation, we  found that the presence of cheese in a recipe correlates with calory values. As an ingredient rich in nutrients like calcium, protein, and fat, we wonder what the key nutrients play a significant role in determining calories. Thus, we want to predict calorie amounts based on the presence of cheese and other nutritional features.
 
 We evaluated our model using Root Mean Squared Error (`RMSE`). It is a more direct value to assess the errors in the test set, making it easy to interpret. Also, we can compare `RMSE` of testing and training set to examine if the model is overfitting, resulting in a dataframe that can generalize better. It is very important for our model because the values of our features, the nutritions, can vary a lot in real world. Compared to `RMSE`, `R^2` only tells us how the linear model fit the existed dataset, with less power to generalize.   
 
@@ -281,20 +281,23 @@ The `RMSE` of the train set is 203.8 and the `RMSE` of the test set is 196.2. Th
 
 ## Final Model
 
-We consider columns 'total_fat', 'sugar', 'sodium', 'protein', 'saturated_fat', 'carbohydrates' as features that may contribute to predicting because calories are derived from macronutrients (fats, proteins, and carbohydrates) and other nutritional components. By including these features, we capture the primary sources of calories in recipes, making them highly relevant for the prediction task. Besides them, we also include 'cheese' because it is a calorie-dense ingredient, and its presence in a recipe is likely to significantly impact the total calorie count. Including this feature allows the model to account for the additional calories contributed by cheese.
+We consider all columns of nutritions (`total_fat`, `sugar`, `sodium`, `protein`, `saturated_fat`, `carbohydrates`) as features that may contribute to improvement of our prediction model, because calories scientifically are derived from macronutrients (fats, proteins, and carbohydrates) and other nutritional components. By including these features, we are able to capture more primary sources of calories in recipes, making features more relevant for our target value. In addition, we also include `cheese` because it is a calorie-dense ingredient, and its presence in a recipe is likely to impact the total calorie count, supported by evidence from our hypothesis test. Including this feature allows the model to account for the additional calories contributed by cheese.
 
-We use Linear regression to make the prediction. To optimize the model, we performed hyperparameter tuning using GridSearchCV and find that the best hyperparameter is True for fit_intercept and False for positive.
+We use Linear regression to make the prediction. To optimize the model, we performed hyperparameter tuning using `GridSearchCV` and find that the best hyperparameter is `True` for `fit_intercept` and `False` for `positive`.
 
-To improve the model's performance, we experimented with different combinations of features and transformations:\
-We tried combinations of degree one and found 'total_fat', 'protein', 'carbohydrates' and 'cheese' performed best.\
-We tried applying QuantileTransform to different combination of features, and not surprisingly it doesn't produce a better result.\
-We wondered would larger degree give better result and tried adding different combinations of features of degree 2 to 'total_fat', 'protein', 'carbohydrates' and 'cheese'. [carbohydrates with degree 2, carbohydrates, total_fat, protein, cheese] achieved smallest RMSE.\
-We further tried different combinations of features of degree 2 and 3 and add them to 'total_fat', 'protein', 'carbohydrates' and 'cheese' of degree 1. We didn't achieve better result than ['total_fat', 'protein', 'carbohydrates', 'cheese'].\
-We didn't try degree 4 because as none in degree 3 outperforming orginal combination, it is unlikely we will find a better combination in degree 4. We can also see that when we try different d for PolynomialFeatures(d), 1 achieves smallest RMSE for test set.
+To improve the model's performance, we experimented with different combinations of features and transformations:
+- We tried combinations of degree one of features, and found `total_fat`, `protein`, `carbohydrates` and `cheese` performed best.
+- We tried applying `QuantileTransform` to different combination of features, and it largely increases our `RMSE`, from 196 for the baseline model to 486.72 on test set. Thus `QuantileTransform`is not a good transformer for our model. 
 
-So our final model is a linear regression using [carbohydrates with degree 2, carbohydrates, total_fat, protein, cheese], in which [carbohydrates, total_fat, protein] are quantitative values that don't need further transformation. cheese is booleans but since the program takes True as 1 and False as 0, it also don't need further transformation. carbohydrates with degree 2 is got by apply make_column_transformer to carbohydrates.
+Then we wondered if higher degrees in our regression model would give a better result, so we tried adding different combinations of features of degree 2 to `total_fat`, `protein`, `carbohydrates` and `cheese`. The result we got is the list of features `curr_best_features = [carbohydrates^2, carbohydrates, total_fat, protein, cheese]` that achieved the smallest `RMSE`.
 
-The final model performs better than baseline model. It achieves RMSE of 48.40 for train set and of 43.58 for test set.
+We further tried different combinations of features of degree 2 and 3 and add them to `total_fat`, `protein`, `carbohydrates` and `cheese` of degree
+- We failed to achieve better result than `curr_best_features`.
+- We stopped at degree 3 because as none in degree 3 outperforming orginal combination, it is unlikely we will find a better combination in degree 4. We can also see that when we try different `d` (in `range(4)`) for `PolynomialFeatures(d)`, degree 1 achieves smallest RMSE for test set.
+
+So our final model is a linear regression using `curr_best_features = [carbohydrates^2, carbohydrates, total_fat, protein, cheese]`, in which `carbohydrates`, `total_fat`, `protein` are quantitative values that don't need further transformation. `cheese` is booleans but since the program takes `True` as 1 and `False` as 0, it also don't need further transformation. `carbohydrates` with degree 2 is achieved by applying `make_column_transformer`.
+
+The final model performs better than baseline model. It achieves `RMSE` of 48.40 for train set and of 43.58 for test set.
 
 ## Fairness Analysis
 

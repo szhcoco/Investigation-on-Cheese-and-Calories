@@ -4,7 +4,7 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/assets/css/style.css?v=57a0ab6c8d36f19633f183d113702d822c7b1a1a" media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=1348b2c51dc3dc57c5897d8bc7129c714760772a" media="screen" type="text/css">
     <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
 
     <!--[if lt IE 9]>
@@ -502,9 +502,8 @@ The pivot table is aimed to examine the <code class="language-plaintext highligh
 
 <h3 id="missingness-dependency">Missingness Dependency</h3>
 
-<p>In this part, we will examine the missingness dependency between columns, using permutation tests.</p>
+<p>In this part, we will examine the missingness dependency between <code class="language-plaintext highlighter-rouge">rating</code> and the other two columns, using permutation tests.</p>
 
-<h4 id="mar">MAR</h4>
 <p>The first two columns that we want to focus on are <code class="language-plaintext highlighter-rouge">calories</code> and <code class="language-plaintext highlighter-rouge">rating</code>, and we want to determine whether the missingness in <code class="language-plaintext highlighter-rouge">rating</code> is dependent on distribution of <code class="language-plaintext highlighter-rouge">calories</code>.</p>
 
 <p><strong>Null Hypothesis</strong>: the distribution of  <code class="language-plaintext highlighter-rouge">calories</code> is the same when <code class="language-plaintext highlighter-rouge">rating</code> is missing and not missing.
@@ -527,19 +526,20 @@ The pivot table is aimed to examine the <code class="language-plaintext highligh
 <p>Since the p value is less than 0.05 and as small as 0, we have strong evidence to reject the null hypothesis and say that the distribution for <code class="language-plaintext highlighter-rouge">calories</code> is different for missing and not missing <code class="language-plaintext highlighter-rouge">rating</code>. Thus missingness in <code class="language-plaintext highlighter-rouge">rating</code> is MAR, dependent on <code class="language-plaintext highlighter-rouge">calories</code>.</p>
 
 <p><br />
-Then we want to see if the missingness in description is dependent on number of steps to cook, or <code class="language-plaintext highlighter-rouge">n_steps</code> in the <code class="language-plaintext highlighter-rouge">recipes</code> dataframe.
-<strong>Null hypothesis</strong>: the distribution of <code class="language-plaintext highlighter-rouge">n_steps</code> is the same when <code class="language-plaintext highlighter-rouge">description</code> is missing and not missing.
-<strong>Alternative hypothesis</strong>: the distribution of <code class="language-plaintext highlighter-rouge">n_steps </code>is not the same when <code class="language-plaintext highlighter-rouge">description</code> is missing and not missing.</p>
+Then we want to see if the missingness in rating is dependent on the time spent on cooking, or <code class="language-plaintext highlighter-rouge">minutes</code> in the <code class="language-plaintext highlighter-rouge">combine</code> dataframe.</p>
 
-<p>We visualize the distribution of two distributions to determine type of test to perform.</p>
+<p><strong>Null hypothesis</strong>: the distribution of <code class="language-plaintext highlighter-rouge">minutes</code> is the same when <code class="language-plaintext highlighter-rouge">rating</code> is missing and not missing.<br />
+<strong>Alternative hypothesis</strong>: the distribution of <code class="language-plaintext highlighter-rouge">minutes</code> is not the same when <code class="language-plaintext highlighter-rouge">rating</code> is missing and not missing.</p>
 
-<iframe src="assets/steps_descrip.html" width="900" height="500" frameborder="0"></iframe>
+<p>We visualize the two distributions to determine type of test to perform. We also exclude outliers in <code class="language-plaintext highlighter-rouge">minutes</code> to make it clearer to see.</p>
 
-<p>From the histogram we notice that two distributions have similar shape. Thus we would use <strong>permutation test</strong> with <strong>absolute values in means</strong> as test statistics, or the mean of <code class="language-plaintext highlighter-rouge">n_steps</code> when <code class="language-plaintext highlighter-rouge">description</code> is missing and not missing. The significance level is <strong>0.05</strong>.</p>
+<iframe src="assets/rating_minutes_no_outliers.html" width="900" height="500" frameborder="0"></iframe>
 
-<iframe src="assets/perm_2.html" width="900" height="450" frameborder="0"></iframe>
+<p>From the histogram we notice that two distributions have similar shape. Thus we would use <strong>permutation test</strong> with <strong>absolute values in means</strong> as test statistics, or the mean of <code class="language-plaintext highlighter-rouge">minutes</code> when <code class="language-plaintext highlighter-rouge">rating</code> is missing and not missing. The significance level is <strong>0.05</strong>.</p>
 
-<p>The p_value from the permutation test is 0.216, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of <code class="language-plaintext highlighter-rouge">n_steps</code> are different when description is missing and not missing. Thus the missingness dependency between <code class="language-plaintext highlighter-rouge">description</code> and <code class="language-plaintext highlighter-rouge">n_steps</code> are MCAR.</p>
+<iframe src="assets/permu_test_2.html" width="900" height="450" frameborder="0"></iframe>
+
+<p>The p_value from the permutation test is 0.14, which is greater than the threshold of 0.05. We fail to reject the null hypothesis to say that the two distributions of <code class="language-plaintext highlighter-rouge">minutes</code> are different when rating is missing and not missing. Thus the missingness of <code class="language-plaintext highlighter-rouge">rating</code> is not dependent on <code class="language-plaintext highlighter-rouge">minutes</code>.</p>
 
 <h2 id="hypothesis-testing">Hypothesis Testing</h2>
 
@@ -554,40 +554,47 @@ Then we want to see if the missingness in description is dependent on number of 
 
 <p>In our permutation test we randomly shuffle calories and assign them to recipes for 1000 times to generate an empirical distribution of the test statistics. We find p value is 0.0, which means none of our randomly generated difference is larger than the observed statistic. Therefore, we have strong evidence to reject the null hypothesis and suggest that recipes with cheese would have higher calories.</p>
 
-<iframe src="assets/hypothesis.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="assets/hypothesis.html" width="800" height="450" frameborder="0"></iframe>
 
 <h2 id="framing-a-prediction">Framing a Prediction</h2>
 
-<p>We plan to predict the amount of calories for each recipe using a linear regression model. Since the amount of calories can be any positive value, linear regression is a suitable choice for this continuous target variable.</p>
+<p>We plan to predict the amount of calories for each recipe using a linear regression model as <code class="language-plaintext highlighter-rouge">calories</code> are continous variable. It is hard to predict the amount of calories as a quantitative value by classification.</p>
 
-<p>The target variable for our model is the amount of calories in each recipe. We chose this as our prediction target because calories are an important factor when deciding whether to use a recipe for a meal. Recipes with too many calories may raise health concerns, while recipes with too few calories may not suffice as a complete meal. Additionally, calories are intuitively related to other nutritional components, such as fats, proteins, and carbohydrates. From our preliminary investigation, we also found that the presence of cheese in a recipe is correlated with calorie content. This suggests that we can predict calorie amounts based on the presence of cheese and other nutritional features.</p>
+<p>The reason we choose to use <code class="language-plaintext highlighter-rouge">calories </code>as our prediction target is that it is an important factor in deciding whether to use a recipe for a meal. Recipes with too many calories may raise health concerns, while recipes with too few calories may not be able to maintain our daily activities. From our earlier investigation, we  found that the presence of cheese in a recipe correlates with calory values. As an ingredient rich in nutrients like calcium, protein, and fat, we wonder what the key nutrients play a significant role in determining calories. Thus, we want to predict calorie amounts based on the presence of cheese and other nutritional features.</p>
 
-<p>We evaluated our model using Root Mean Squared Error (RMSE). RMSE measures the average magnitude of the prediction errors in the same units as the target variable (calories), making it easy to interpret. We chose RMSE over $R^2$ because RMSE provides a direct measure of prediction error, while $R^2$ only explains the proportion of variance in the target variable. Additionally, we chose RMSE over Mean Absolute Error (MAE) because RMSE penalizes large errors more heavily, which aligns with our goal of avoiding significant inaccuracies in calorie predictions.</p>
+<p>We evaluated our model using Root Mean Squared Error (<code class="language-plaintext highlighter-rouge">RMSE</code>). It is a more direct value to assess the errors in the test set, making it easy to interpret. Also, we can compare <code class="language-plaintext highlighter-rouge">RMSE</code> of testing and training set to examine if the model is overfitting, resulting in a dataframe that can generalize better. It is very important for our model because the values of our features, the nutritions, can vary a lot in real world. Compared to <code class="language-plaintext highlighter-rouge">RMSE</code>, <code class="language-plaintext highlighter-rouge">R^2</code> only tells us how the linear model fit the existed dataset, with less power to generalize.</p>
 
-<p>Since the nutritions are calculated separately, it is reasonable to use other nutrition and ingredients to predict the amount of calories.</p>
+<p>At the point of prediction, we information about values of different nutritions used in recipes from the <code class="language-plaintext highlighter-rouge">nutritions</code> column, and we also know the prescence of from the <code class="language-plaintext highlighter-rouge">cheese</code> column created from <code class="language-plaintext highlighter-rouge">ingredients</code>. We will use them as features in our regression model.</p>
 
 <h2 id="baseline-model">Baseline Model</h2>
 
-<p>In our baseline model, we want to use linear regression to predict the amount of calories, a quantitative value, in recipes using features total_fat and sugar. All features here (calories, total_fat, sugar) are quantitative, so we don’t need to do any transformation here and can use them directly in the LinearRegression() function. We chose linear regression for the baseline model because all features we are using are continuous. It is hard to predict the amount of calories, a quantitative value, by classification. The data is split into training and testing sets with ratios of 0.8 and 0.2.</p>
+<p>In our baseline model, we want to use linear regression to predict the amount of calories, a quantitative value. We use features in <code class="language-plaintext highlighter-rouge">recipes</code> dataframe, including <code class="language-plaintext highlighter-rouge">total_fat</code> and <code class="language-plaintext highlighter-rouge">sugar</code>. All features here (<code class="language-plaintext highlighter-rouge">calories</code>, <code class="language-plaintext highlighter-rouge">total_fat</code>, <code class="language-plaintext highlighter-rouge">sugar</code>) are quantitative and continuous, so we don’t need to do any transformation here and can use them directly in the <code class="language-plaintext highlighter-rouge">LinearRegression()</code> function. The data is split into training and testing sets with ratios of 0.8 and 0.2.</p>
 
-<p>The RMSE of the train set is 203.8 and the RMSE of the test set is 196.2. The similar performance on the training and testing sets indicates that there is no significant overfitting. However, the RMSE of approximately 200 calories is relatively high, so we may still improve our model. Besides, the model uses only two features (total_fat and sugar) without carefully choosing or further transformation. So we should be able to improve the model performance by carefully choosing features and trying some transformation.</p>
+<p>The <code class="language-plaintext highlighter-rouge">RMSE</code> of the train set is 203.8 and the <code class="language-plaintext highlighter-rouge">RMSE</code> of the test set is 196.2. The similar performance on the training and testing sets indicates that there is no significant overfitting. However, the <code class="language-plaintext highlighter-rouge">RMSE</code> of approximately 200 calories is relatively high, so we still need to improve our model. Besides, the model uses only two features (<code class="language-plaintext highlighter-rouge">total_fat</code> and <code class="language-plaintext highlighter-rouge">sugar</code>), all directly put into the <code class="language-plaintext highlighter-rouge">LinearRegression()</code> function. So we should be able to improve the model performance by carefully choosing features and trying some transformation.</p>
 
 <h2 id="final-model">Final Model</h2>
 
-<p>We consider columns ‘total_fat’, ‘sugar’, ‘sodium’, ‘protein’, ‘saturated_fat’, ‘carbohydrates’ as features that may contribute to predicting because calories are derived from macronutrients (fats, proteins, and carbohydrates) and other nutritional components. By including these features, we capture the primary sources of calories in recipes, making them highly relevant for the prediction task. Besides them, we also include ‘cheese’ because it is a calorie-dense ingredient, and its presence in a recipe is likely to significantly impact the total calorie count. Including this feature allows the model to account for the additional calories contributed by cheese.</p>
+<p>We consider all columns of nutritions (<code class="language-plaintext highlighter-rouge">total_fat</code>, <code class="language-plaintext highlighter-rouge">sugar</code>, <code class="language-plaintext highlighter-rouge">sodium</code>, <code class="language-plaintext highlighter-rouge">protein</code>, <code class="language-plaintext highlighter-rouge">saturated_fat</code>, <code class="language-plaintext highlighter-rouge">carbohydrates</code>) as features that may contribute to improvement of our prediction model, because calories scientifically are derived from macronutrients (fats, proteins, and carbohydrates) and other nutritional components. By including these features, we are able to capture more primary sources of calories in recipes, making features more relevant for our target value. In addition, we also include <code class="language-plaintext highlighter-rouge">cheese</code> because it is a calorie-dense ingredient, and its presence in a recipe is likely to impact the total calorie count, supported by evidence from our hypothesis test. Including this feature allows the model to account for the additional calories contributed by cheese.</p>
 
-<p>We use Linear regression to make the prediction. To optimize the model, we performed hyperparameter tuning using GridSearchCV and find that the best hyperparameter is True for fit_intercept and False for positive.</p>
+<p>We use Linear regression to make the prediction. To optimize the model, we performed hyperparameter tuning using <code class="language-plaintext highlighter-rouge">GridSearchCV</code> and find that the best hyperparameter is <code class="language-plaintext highlighter-rouge">True</code> for <code class="language-plaintext highlighter-rouge">fit_intercept</code> and <code class="language-plaintext highlighter-rouge">False</code> for <code class="language-plaintext highlighter-rouge">positive</code>.</p>
 
-<p>To improve the model’s performance, we experimented with different combinations of features and transformations:<br />
-We tried combinations of degree one and found ‘total_fat’, ‘protein’, ‘carbohydrates’ and ‘cheese’ performed best.<br />
-We tried applying QuantileTransform to different combination of features, and not surprisingly it doesn’t produce a better result.<br />
-We wondered would larger degree give better result and tried adding different combinations of features of degree 2 to ‘total_fat’, ‘protein’, ‘carbohydrates’ and ‘cheese’. [carbohydrates with degree 2, carbohydrates, total_fat, protein, cheese] achieved smallest RMSE.<br />
-We further tried different combinations of features of degree 2 and 3 and add them to ‘total_fat’, ‘protein’, ‘carbohydrates’ and ‘cheese’ of degree 1. We didn’t achieve better result than [‘total_fat’, ‘protein’, ‘carbohydrates’, ‘cheese’].<br />
-We didn’t try degree 4 because as none in degree 3 outperforming orginal combination, it is unlikely we will find a better combination in degree 4. We can also see that when we try different d for PolynomialFeatures(d), 1 achieves smallest RMSE for test set.</p>
+<p>To improve the model’s performance, we experimented with different combinations of features and transformations:</p>
+<ul>
+  <li>We tried combinations of degree one of features, and found <code class="language-plaintext highlighter-rouge">total_fat</code>, <code class="language-plaintext highlighter-rouge">protein</code>, <code class="language-plaintext highlighter-rouge">carbohydrates</code> and <code class="language-plaintext highlighter-rouge">cheese</code> performed best.</li>
+  <li>We tried applying <code class="language-plaintext highlighter-rouge">QuantileTransform</code> to different combination of features, and it largely increases our <code class="language-plaintext highlighter-rouge">RMSE</code>, from 196 for the baseline model to 486.72 on test set. Thus <code class="language-plaintext highlighter-rouge">QuantileTransform</code>is not a good transformer for our model.</li>
+</ul>
 
-<p>So our final model is a linear regression using [carbohydrates with degree 2, carbohydrates, total_fat, protein, cheese], in which [carbohydrates, total_fat, protein] are quantitative values that don’t need further transformation. cheese is booleans but since the program takes True as 1 and False as 0, it also don’t need further transformation. carbohydrates with degree 2 is got by apply make_column_transformer to carbohydrates.</p>
+<p>Then we wondered if higher degrees in our regression model would give a better result, so we tried adding different combinations of features of degree 2 to <code class="language-plaintext highlighter-rouge">total_fat</code>, <code class="language-plaintext highlighter-rouge">protein</code>, <code class="language-plaintext highlighter-rouge">carbohydrates</code> and <code class="language-plaintext highlighter-rouge">cheese</code>. The result we got is the list of features <code class="language-plaintext highlighter-rouge">curr_best_features = [carbohydrates^2, carbohydrates, total_fat, protein, cheese]</code> that achieved the smallest <code class="language-plaintext highlighter-rouge">RMSE</code>.</p>
 
-<p>The final model performs better than baseline model. It achieves RMSE of 48.40 for train set and of 43.58 for test set.</p>
+<p>We further tried different combinations of features of degree 2 and 3 and add them to <code class="language-plaintext highlighter-rouge">total_fat</code>, <code class="language-plaintext highlighter-rouge">protein</code>, <code class="language-plaintext highlighter-rouge">carbohydrates</code> and <code class="language-plaintext highlighter-rouge">cheese</code> of degree</p>
+<ul>
+  <li>We failed to achieve better result than <code class="language-plaintext highlighter-rouge">curr_best_features</code>.</li>
+  <li>We stopped at degree 3 because as none in degree 3 outperforming orginal combination, it is unlikely we will find a better combination in degree 4. We can also see that when we try different <code class="language-plaintext highlighter-rouge">d</code> (in <code class="language-plaintext highlighter-rouge">range(4)</code>) for <code class="language-plaintext highlighter-rouge">PolynomialFeatures(d)</code>, degree 1 achieves smallest RMSE for test set.</li>
+</ul>
+
+<p>So our final model is a linear regression using <code class="language-plaintext highlighter-rouge">curr_best_features = [carbohydrates^2, carbohydrates, total_fat, protein, cheese]</code>, in which <code class="language-plaintext highlighter-rouge">carbohydrates</code>, <code class="language-plaintext highlighter-rouge">total_fat</code>, <code class="language-plaintext highlighter-rouge">protein</code> are quantitative values that don’t need further transformation. <code class="language-plaintext highlighter-rouge">cheese</code> is booleans but since the program takes <code class="language-plaintext highlighter-rouge">True</code> as 1 and <code class="language-plaintext highlighter-rouge">False</code> as 0, it also don’t need further transformation. <code class="language-plaintext highlighter-rouge">carbohydrates</code> with degree 2 is achieved by applying <code class="language-plaintext highlighter-rouge">make_column_transformer</code>.</p>
+
+<p>The final model performs better than baseline model. It achieves <code class="language-plaintext highlighter-rouge">RMSE</code> of 48.40 for train set and of 43.58 for test set.</p>
 
 <h2 id="fairness-analysis">Fairness Analysis</h2>
 
