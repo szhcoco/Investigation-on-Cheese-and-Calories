@@ -140,7 +140,9 @@ For bivariate analysis, we will examine the distribution of calories with and wi
   frameborder="0"
 ></iframe>
 
- We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese, indicating that calories of recipes with cheese may be higher than calories of those without cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories. 
+ We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese, indicating that calories of recipes with cheese may be higher than calories of those without cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories.
+
+ Then we want to  
 
 ### Grouping and Aggregates
 An interesting aggregate that we find is shown in the pivot table below. 
