@@ -149,6 +149,8 @@ For bivariate analysis, we will examine the distribution of calories with and wi
   frameborder="0"
 ></iframe> 
 
+Then we want to examine the relationship between calories and nutritions. The above scatter plot is consisted of six subplots, each showing the relationship betwee calories and one nutrition `[total_fat, sugar, sodium, protein, saturated_fat, carbonhydrates]`. Except for the scatter plot with sodium, all the other five display a positive correlated relationship. It implies the role that the nutritions might play in prediction calories. 
+
 ### Grouping and Aggregates
 An interesting aggregate that we find is shown in the pivot table below. 
 

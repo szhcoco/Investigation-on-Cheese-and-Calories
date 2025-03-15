@@ -140,7 +140,16 @@ For bivariate analysis, we will examine the distribution of calories with and wi
   frameborder="0"
 ></iframe>
 
- We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese, indicating that calories of recipes with cheese may be higher than calories of those without cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories. 
+ We can see that both distributions skew to the left, but the peak of distribution of calories without cheese is on the left of the distribution with cheese, indicating that calories of recipes with cheese may be higher than calories of those without cheese. We will further investigate in later sections on whether having cheese in recipes tend to have higher calories.
+
+<iframe
+  src="assets/fig_scatter_subplots.html"
+  width="900"
+  height="500"
+  frameborder="0"
+></iframe> 
+
+Then we want to examine the relationship between calories and nutritions. The above scatter plot is consisted of six subplots, each showing the relationship betwee calories and one nutrition `[total_fat, sugar, sodium, protein, saturated_fat, carbonhydrates]`. Except for the scatter plot with sodium, all the other five display a positive correlated relationship. It implies the role that the nutritions might play in prediction calories. 
 
 ### Grouping and Aggregates
 An interesting aggregate that we find is shown in the pivot table below. 
@@ -289,7 +298,7 @@ The `RMSE` of the train set is 203.8 and the `RMSE` of the test set is 196.2. Th
 
 We consider all columns of nutritions (`total_fat`, `sugar`, `sodium`, `protein`, `saturated_fat`, `carbohydrates`) as features that may contribute to improvement of our prediction model, because calories scientifically are derived from macronutrients (fats, proteins, and carbohydrates) and other nutritional components. By including these features, we are able to capture more primary sources of calories in recipes, making features more relevant for our target value. In addition, we also include `cheese` because it is a calorie-dense ingredient, and its presence in a recipe is likely to impact the total calorie count, supported by evidence from our hypothesis test. Including this feature allows the model to account for the additional calories contributed by cheese.
 
-We use Linear regression to make the prediction. To optimize the model, we performed hyperparameter tuning using `GridSearchCV` and find that the best hyperparameter is `True` for `fit_intercept` and `False` for `positive`.
+We use Linear regression to make the prediction. To optimize the model, we performed hyperparameter tuning using `GridSearchCV`. The only two hyperparameters in `LinearRegression()` are `fit_intercept` and `positive`, and we find that the best hyperparameter is `True` for `fit_intercept` and `False` for `positive`. 
 
 To improve the model's performance, we experimented with different combinations of features and transformations:
 - We tried combinations of degree one of features, and found `total_fat`, `protein`, `carbohydrates` and `cheese` performed best.
@@ -329,7 +338,7 @@ To check the p value, we use permutation testing here. For each recipe we list t
 As a result, we get a p value of 0.201, which is larger than the significance level. We don't have enough evidence to reject the null hypothesis. It implies that our model results in similar performance in predicting calories when the amount of sugar is low and high. 
 
 
-We also want to see if our prediction is fair for predicting cheese. More specifically, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use `RMSE` as an evaluation metric and permutation test to simulate the difference in random state.\
+We also want to see if our model is fair in predicting cheese. More specifically, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use `RMSE` as an evaluation metric and permutation test to simulate the difference in random state.\
 We run a permutation test in a similar way as we did in fairness analysis for sugar. The only difference is that instead of grouping recipes based on sugar, we group them based on the existence of cheese.
 
 
