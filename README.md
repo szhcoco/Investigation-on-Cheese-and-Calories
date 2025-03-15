@@ -40,7 +40,7 @@ Our goal in this project is to answer the question of **whether food with cheese
  - `RAW_interactions` dataset: 731,927 rows and 5 columns, recording users' ratings and comments for different recipes.
 
 | Column      | Description         |
-|:------------|:--------------------|
+|:-----------:|:--------------------|
 | 'user_id'   | User ID             |
 | 'recipe_id' | Recipe ID           |
 | 'date'      | Date of interaction |
@@ -178,6 +178,8 @@ In this part, we will examine the missingness dependency between `rating` and th
 The first two columns that we want to focus on are `calories` and `rating`, and we want to determine whether the missingness in `rating` is dependent on distribution of `calories`. 
 
 **Null Hypothesis**: the distribution of  `calories` is the same when `rating` is missing and not missing.
+
+
 **Alternative Hypothesis**: the distribution of `calories` is not the same when `rating` is missing and not missing.
 
 Before performing the permutation test, we want to visualize the distribution of calories for recipes missing and not missing.
@@ -217,7 +219,8 @@ Since the p value is less than 0.05 and as small as 0, we have strong evidence t
 <br>
 Then we want to see if the missingness in rating is dependent on the time spent on cooking, or `minutes` in the `combine` dataframe.
 
-**Null hypothesis**: the distribution of `minutes` is the same when `rating` is missing and not missing.  
+**Null hypothesis**: the distribution of `minutes` is the same when `rating` is missing and not missing.
+
 **Alternative hypothesis**: the distribution of `minutes` is not the same when `rating` is missing and not missing.
 
 We visualize the two distributions to determine type of test to perform. We also exclude outliers in `minutes` to make it clearer to see.  
@@ -247,9 +250,12 @@ The p_value from the permutation test is 0.14, which is greater than the thresho
 
 Recalling the goal of our project, we will investigate whether the amount of calories in a recipe is larger when there is cheese in the ingredients. The columns we will use are `calories` and `cheese`. We decided to test our hypothesis using a permutation test.
 
-**Null Hypothesis**: the amount of calories for a recipe with cheese is the same as the amount of calories without cheese.\
-**Alternative Hypothesis**: the amount of calories for a recipe with cheese is the greater than the amount of calories without cheese.\
-**Test Statistic**: mean calories with cheese - mean calories without cheese.\
+**Null Hypothesis**: the amount of calories for a recipe with cheese is the same as the amount of calories without cheese.
+
+**Alternative Hypothesis**: the amount of calories for a recipe with cheese is the greater than the amount of calories without cheese.
+
+**Test Statistic**: mean calories with cheese - mean calories without cheese.
+
 **Significance Level**: 0.05
 
 For test statistics, a large value in (mean calories with cheese - mean calories without cheese) will imply that more calories in a recipe  with cheese than recipes without cheese. 
@@ -269,7 +275,7 @@ We plan to predict the amount of calories for each recipe using a linear regress
 
 The reason we choose to use `calories `as our prediction target is that it is an important factor in deciding whether to use a recipe for a meal. Recipes with too many calories may raise health concerns, while recipes with too few calories may not be able to maintain our daily activities. From our earlier investigation, we  found that the presence of cheese in a recipe correlates with calory values. As an ingredient rich in nutrients like calcium, protein, and fat, we wonder what the key nutrients play a significant role in determining calories. Thus, we want to predict calorie amounts based on the presence of cheese and other nutritional features.
 
-We evaluated our model using Root Mean Squared Error (`RMSE`). It is a more direct value to assess the errors in the test set, making it easy to interpret. Also, we can compare `RMSE` of testing and training set to examine if the model is overfitting, resulting in a dataframe that can generalize better. It is very important for our model because the values of our features, the nutritions, can vary a lot in real world. Compared to `RMSE`, `R^2` only tells us how the linear model fit the existed dataset, with less power to generalize.   
+We evaluated our model using Root Mean Squared Error (`RMSE`). It is a more direct value to assess the errors in the test set, making it easy to interpret. Also, we can compare `RMSE` of testing and training set to examine if the model is overfitting, resulting in a dataframe that can generalize better. It is very important for our model because the values of our features, the nutritions, can vary a lot in real world. Compared to `RMSE`, R<sup>2</sup> only tells us how the linear model fit the existed dataset, with less power to generalize.   
 
 At the point of prediction, we information about values of different nutritions used in recipes from the `nutritions` column, and we also know the prescence of from the `cheese` column created from `ingredients`. We will use them as features in our regression model. 
 
@@ -301,37 +307,45 @@ The final model performs better than baseline model. It achieves `RMSE` of 48.40
 
 ## Fairness Analysis
 
-For fairness analysis, we split the data into two groups: recipes with low sugar (less or equal to 23) and recipes with high sugar (more than 23). We pick 23 as the split point because it is the median of sugar in the dataset. Since we use a linear regression model, we decide to rate our test using rooted mean squared error. It is easier to understand compared to $R^2$ and it is better to keep a consistency with prediction part.\
-To check the p value, we use permutation testing here. For each recipe we list their actual calories and predicted calories. Then we can calculate squared error for each recipe. By calculating the square root of mean value for each group (low sugar and high sugar), we get two RMSE values and so their difference. We shuffle whether each recipe has high or low sugar and calculate simulated results based on the shuffled category following the same way.
+For fairness analysis, we split the data into two groups: recipes with low sugar (less or equal to 23) and recipes with high sugar (more than 23). We pick 23 as the split point because it is the median of sugar in the `recipes` dataset. Since we use a linear regression model, we decide to use `RMSE` as our evaluation metric. It is easier to understand compared to R<sup>2</sup> and it is better to keep a consistency with the elavuation metric we used during model prediction.
 
+To check the p value, we use permutation testing here. For each recipe we list their actual calories and predicted calories. Then we can calculate squared error for each recipe. By calculating the square root of mean value for each group (low sugar and high sugar), we first created a column called `X_test_high` using `Binarizer` transformer to determine if the value of sugar in the test set is above 23. Then for a 1000 times, we calculated two `RMSE` values and so their difference. We shuffled `X_test_high` and re-calculate the `RMSE` and their differences, storing in a `stats` list. 
 
-**Null hypothesis**: Our model is fair. It predicts calories for recipes with low sugar and high sugar with similar RMSE.\
-**Alternative hypothesis**: our model is biased. It predicts calories for recipes with high sugar with higher RMSE than recipes with low sugar.\
-**Test statistic**: RMSE of recipes with high sugar-RMSE of recipes with low sugar\
+**Null hypothesis**: Our model is fair. It predicts calories for recipes with low sugar and high sugar with similar RMSE.
+
+**Alternative hypothesis**: our model is biased. It predicts calories for recipes with high sugar with higher RMSE than recipes with low sugar.
+
+**Test statistic**: RMSE of recipes with high sugar-RMSE of recipes with low sugar
+
 **Significance level**: 0.05
 
 <iframe
   src="assets/sugar_fair.html"
   width="800"
-  height="600"
+  height="450"
   frameborder="0"
 ></iframe>
-As a result, we get a p value of 0.201, which is larger than the significance level. We fail to reject the null hypothesis.
+
+As a result, we get a p value of 0.201, which is larger than the significance level. We don't have enough evidence to reject the null hypothesis. It implies that our model results in similar performance in predicting calories when the amount of sugar is low and high. 
 
 
-We also want to see if our prediction is fair for cheese. More precisely, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use RMSE as an evaluation metric and permutation test to simulate the difference in random state.\
+We also want to see if our prediction is fair for predicting cheese. More specifically, if our prediction is fair for recipes with cheese and without cheese. Similarly, we use `RMSE` as an evaluation metric and permutation test to simulate the difference in random state.\
 We run a permutation test in a similar way as we did in fairness analysis for sugar. The only difference is that instead of grouping recipes based on sugar, we group them based on the existence of cheese.
 
 
-**Null hypothesis**: Our model is fair. It predicts calories for recipes with and without cheese with similar RMSE.\
-**Alternative hypothesis**: our model is biased. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.\
-**Test statistic**: RMSE of recipes with cheese - RMSE of recipes without cheese\
+**Null hypothesis**: Our model is fair. It predicts calories for recipes with and without cheese with similar RMSE.
+
+**Alternative hypothesis**: our model is biased. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.
+
+**Test statistic**: RMSE of recipes with cheese - RMSE of recipes without cheese
+
 **Significance level**: 0.05
 
 <iframe
   src="assets/cheese_fair.html"
   width="800"
-  height="600"
+  height="500"
   frameborder="0"
 ></iframe>
-As a result, we get a p value of 0.0, which is lower than the significance level. We reject the null hypothesis and conclude that our model is unfair. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese.
+
+As a result, we get a p value of 0.0, which is much lower than the significance level, so we reject the null hypothesis. The result implies that our model is unfair. It predicts calories for recipes without cheese with higher RMSE than recipes with cheese. 
